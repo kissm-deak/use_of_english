@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B1 Use of English Érettségi Trainer</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        .font-serif-title {
+            font-family: 'Cinzel', serif;
+        }
+        
+        /* Glassmorphism effects */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .dark .glass-panel {
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.5);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(107, 114, 128, 0.8);
+        }
+
+        /* Certificate Print Stylesheet */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #printable-certificate-container, #printable-certificate-container * {
+                visibility: visible;
+            }
+            #printable-certificate-container {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background: white !important;
+                color: black !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                box-shadow: none !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-full font-sans antialiased flex flex-col transition-colors duration-300">
+
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-30 glass-panel border-b border-slate-200 dark:border-slate-800 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <!-- Logo & Title -->
+            <div class="flex items-center space-x-3 cursor-pointer" id="nav-brand">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+                    <i class="fa-solid fa-graduation-cap text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight tracking-tight text-slate-900 dark:text-white">
+                        B1 Érettségi Trainer
+                    </h1>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">Use of English Practice</p>
+                </div>
+            </div>
+
+            <!-- Controls & Profile -->
+            <div class="flex items-center space-x-2 sm:space-x-4">
+                <!-- Sound Effects Toggle -->
+                <button id="btn-toggle-sound" title="Toggle Sound Effects" class="p-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-volume-high text-lg" id="icon-sound"></i>
+                </button>
+
+                <!-- Dark Mode Toggle -->
+                <button id="btn-toggle-theme" title="Toggle Theme" class="p-2.5 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-moon text-lg dark:hidden"></i>
+                    <i class="fa-solid fa-sun text-lg hidden dark:block text-amber-400"></i>
+                </button>
+
+                <!-- Student Profile Button -->
+                <button id="btn-edit-profile" class="flex items-center space-x-2 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-800/50 hover:border-blue-500 dark:hover:border-blue-400 transition">
+                    <div class="w-7 h-7 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300 flex items-center justify-center text-xs font-bold" id="user-avatar-initials">
+                        ST
+                    </div>
+                    <span id="user-display-name" class="text-sm font-semibold text-slate-700 dark:text-slate-200 max-w-[120px] sm:max-w-[180px] truncate">
+                        Student
+                    </span>
+                    <i class="fa-solid fa-user-pen text-xs text-slate-400"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col">
+        
+        <!-- ==================== VIEW 1: DASHBOARD ==================== -->
+        <section id="view-dashboard" class="space-y-8 animate-fadeIn">
+            <!-- Welcome Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-6 sm:p-10 text-white shadow-xl shadow-indigo-500/10">
+                <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+                <div class="relative z-10 max-w-2xl">
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-white/20 text-white backdrop-blur-md mb-3">
+                        <i class="fa-solid fa-award mr-1.5 text-amber-300"></i> Official B1 Érettségi Standard
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold tracking-tight mb-2">
+                        Ready to Master English Grammar?
+                    </h2>
+                    <p class="text-blue-100 text-sm sm:text-base mb-6 leading-relaxed">
+                        Welcome, <span id="hero-student-name" class="font-bold text-white underline decoration-amber-400 underline-offset-4">Student</span>! Train with authentic Use of English task types: Multiple Choice, Open Cloze, and Word Formation. Receive instant explanations and track your Érettségi grade level.
+                    </p>
+                    <div class="flex flex-wrap gap-4 items-center">
+                        <button id="btn-quick-start" class="px-6 py-3 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-bold text-sm shadow-lg shadow-amber-400/20 transition transform active:scale-95 flex items-center">
+                            <i class="fa-solid fa-bolt mr-2"></i> Quick Start Full Mock Exam
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Bar -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-sm flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-clipboard-check"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-slate-500 dark:text-slate-400">Total Solved</p>
+                        <p class="text-xl font-bold text-slate-800 dark:text-white" id="stat-total-solved">0</p>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-sm flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-slate-500 dark:text-slate-400">Avg. Accuracy</p>
+                        <p class="text-xl font-bold text-slate-800 dark:text-white" id="stat-avg-accuracy">0%</p>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-sm flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-purple-50 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 flex items-center justify-center text-xl">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-medium text-slate-500 dark:text-slate-400">Best Grade</p>
+                        <p class="text-xl font-bold text-slate-800 dark:text-white" id="stat-best-grade">None</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Teacher Report Unlock Progress -->
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700/60 shadow-sm space-y-4">
+                <div id="unlock-progress-dashboard" class="space-y-3"></div>
+                <div class="pt-3 border-t border-slate-100 dark:border-slate-700/50 flex flex-wrap items-center justify-between gap-3">
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Forgot to check your results? You can open and copy your report here any time.</p>
+                    <button id="btn-dashboard-report" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-md shadow-indigo-600/20 transition flex items-center">
+                        <i class="fa-solid fa-file-lines mr-2"></i> View My Teacher Report
+                    </button>
+                </div>
+            </div>
+
+            <!-- Practice Mode & Category Selector -->
+            <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-900 dark:text-white">Choose Practice Mode</h3>
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Select a specific Use of English category or attempt a full Érettségi exam</p>
+                    </div>
+                </div>
+
+                <!-- Category Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <!-- Task FE1: Multiple Choice -->
+                    <div data-mode="fe1" class="category-card group bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 rounded-2xl p-5 cursor-pointer transition shadow-sm hover:shadow-md flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">FE1</span>
+                                <i class="fa-solid fa-list-check text-slate-400 group-hover:text-blue-500 text-xl transition"></i>
+                            </div>
+                            <h4 class="font-bold text-lg text-slate-900 dark:text-white mb-1">Multiple Choice</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
+                                Select the correct grammar option (A, B, C, or D) to fill the gaps in context.
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between text-xs font-semibold text-blue-600 dark:text-blue-400">
+                            <span>Select Mode</span>
+                            <i class="fa-solid fa-arrow-right transform group-hover:translate-x-1 transition"></i>
+                        </div>
+                    </div>
+
+                    <!-- Task FE2: Open Cloze -->
+                    <div data-mode="fe2" class="category-card group bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-indigo-500 dark:hover:border-indigo-500 rounded-2xl p-5 cursor-pointer transition shadow-sm hover:shadow-md flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300">FE2</span>
+                                <i class="fa-solid fa-pen-line text-slate-400 group-hover:text-indigo-500 text-xl transition"></i>
+                            </div>
+                            <h4 class="font-bold text-lg text-slate-900 dark:text-white mb-1">Open Cloze</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
+                                Type the single missing word (prepositions, articles, auxiliaries) into each gap.
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between text-xs font-semibold text-indigo-600 dark:text-indigo-400">
+                            <span>Select Mode</span>
+                            <i class="fa-solid fa-arrow-right transform group-hover:translate-x-1 transition"></i>
+                        </div>
+                    </div>
+
+                    <!-- Task FE3: Word Formation -->
+                    <div data-mode="fe3" class="category-card group bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-purple-500 dark:hover:border-purple-500 rounded-2xl p-5 cursor-pointer transition shadow-sm hover:shadow-md flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">FE3</span>
+                                <i class="fa-solid fa-cubes text-slate-400 group-hover:text-purple-500 text-xl transition"></i>
+                            </div>
+                            <h4 class="font-bold text-lg text-slate-900 dark:text-white mb-1">Word Formation</h4>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-4">
+                                Transform the base word provided in brackets <code class="text-purple-600 font-bold">[CREATE]</code> to fit grammatically.
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between text-xs font-semibold text-purple-600 dark:text-purple-400">
+                            <span>Select Mode</span>
+                            <i class="fa-solid fa-arrow-right transform group-hover:translate-x-1 transition"></i>
+                        </div>
+                    </div>
+
+                    <!-- Task Full Mock Exam -->
+                    <div data-mode="full" class="category-card group bg-gradient-to-br from-slate-900 to-indigo-950 text-white border-2 border-slate-800 hover:border-amber-400 rounded-2xl p-5 cursor-pointer transition shadow-md hover:shadow-xl flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">MOCK EXAM</span>
+                                <i class="fa-solid fa-certificate text-amber-400 text-xl transition"></i>
+                            </div>
+                            <h4 class="font-bold text-lg text-white mb-1">Full B1 Érettségi Mock</h4>
+                            <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                                Balanced set combining Multiple Choice, Open Cloze, and Word Formation tasks under exam conditions.
+                            </p>
+                        </div>
+                        <div class="pt-3 border-t border-slate-800 flex items-center justify-between text-xs font-semibold text-amber-400">
+                            <span>Start Full Exam</span>
+                            <i class="fa-solid fa-arrow-right transform group-hover:translate-x-1 transition"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Length & Settings Panel -->
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 border border-slate-200 dark:border-slate-700/60 shadow-sm">
+                <h4 class="font-bold text-base text-slate-900 dark:text-white mb-4 flex items-center">
+                    <i class="fa-solid fa-sliders text-blue-500 mr-2"></i> Quiz Options
+                </h4>
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 mb-2">Number of Questions</label>
+                        <div class="flex flex-wrap gap-2" id="question-length-selector">
+                            <button data-len="10" class="length-btn px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-bold text-sm">10 Questions</button>
+                            <button data-len="20" class="length-btn px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 text-slate-700 dark:text-slate-300 font-semibold text-sm">20 Questions</button>
+                            <button data-len="50" class="length-btn px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 text-slate-700 dark:text-slate-300 font-semibold text-sm">50 Questions</button>
+                            <button data-len="100" class="length-btn px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 text-slate-700 dark:text-slate-300 font-semibold text-sm">100 Marathon</button>
+                        </div>
+                    </div>
+
+                    <button id="btn-start-selected-quiz" class="px-8 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-lg shadow-blue-500/25 transition flex items-center justify-center">
+                        <i class="fa-solid fa-play mr-2"></i> Begin Selected Practice
+                    </button>
+                </div>
+            </div>
+
+            <!-- Grade Criteria Standard Info -->
+            <div class="bg-slate-100 dark:bg-slate-800/50 rounded-2xl p-6 border border-slate-200 dark:border-slate-700/50">
+                <h4 class="font-bold text-sm text-slate-800 dark:text-slate-200 mb-3 flex items-center">
+                    <i class="fa-solid fa-scale-balanced mr-2 text-indigo-500"></i> Official B1 Hungarian Érettségi Grading Scale
+                </h4>
+                <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center text-xs">
+                    <div class="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/50">
+                        <span class="block font-bold text-emerald-700 dark:text-emerald-400">Grade 5 (Excellent)</span>
+                        <span class="text-slate-500 dark:text-slate-400">80% - 100%</span>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-800/50">
+                        <span class="block font-bold text-blue-700 dark:text-blue-400">Grade 4 (Good)</span>
+                        <span class="text-slate-500 dark:text-slate-400">60% - 79%</span>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/50">
+                        <span class="block font-bold text-amber-700 dark:text-amber-400">Grade 3 (Satisfactory)</span>
+                        <span class="text-slate-500 dark:text-slate-400">40% - 59%</span>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800/50">
+                        <span class="block font-bold text-orange-700 dark:text-orange-400">Grade 2 (Pass)</span>
+                        <span class="text-slate-500 dark:text-slate-400">25% - 39%</span>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-red-50 dark:bg-red-950/40 border border-red-200 dark:border-red-800/50 col-span-2 sm:col-span-1">
+                        <span class="block font-bold text-red-700 dark:text-red-400">Grade 1 (Fail)</span>
+                        <span class="text-slate-500 dark:text-slate-400">0% - 24%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== VIEW 2: ACTIVE QUIZ ==================== -->
+        <section id="view-quiz" class="hidden flex-col space-y-6 animate-fadeIn">
+            <!-- Quiz Top Header Bar -->
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-700/60 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-start">
+                    <button id="btn-quit-quiz" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 transition flex items-center">
+                        <i class="fa-solid fa-arrow-left mr-1.5"></i> Exit Quiz
+                    </button>
+                    <span id="quiz-mode-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300 uppercase tracking-wider">
+                        FE1: Multiple Choice
+                    </span>
+                </div>
+
+                <!-- Timer & Progress Counter -->
+                <div class="flex items-center space-x-6 w-full sm:w-auto justify-between sm:justify-end text-sm">
+                    <div class="flex items-center text-slate-600 dark:text-slate-300 font-mono font-semibold">
+                        <i class="fa-regular fa-clock mr-2 text-blue-500"></i>
+                        <span id="quiz-timer">00:00</span>
+                    </div>
+                    <div class="flex items-center text-slate-600 dark:text-slate-300 font-semibold">
+                        <span class="text-slate-400 mr-1">Question</span>
+                        <span id="quiz-progress-num" class="text-blue-600 dark:text-blue-400 font-bold">1</span>
+                        <span class="text-slate-400 mx-0.5">/</span>
+                        <span id="quiz-total-num">10</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global Overall Progress Bar -->
+            <div class="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
+                <div id="quiz-progress-bar" class="bg-gradient-to-r from-blue-500 to-indigo-600 h-2 rounded-full transition-all duration-300" style="width: 10%;"></div>
+            </div>
+
+            <!-- Question Navigator Grid Drawer -->
+            <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 border border-slate-200 dark:border-slate-700/60 shadow-sm">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Question Grid Navigator</span>
+                    <span class="text-xs text-slate-400">Click any number to navigate</span>
+                </div>
+                <div id="question-navigator-grid" class="flex flex-wrap gap-2 max-h-28 overflow-y-auto pr-1">
+                    <!-- Dynamic grid buttons will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Main Question Card Container -->
+            <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-700/60 shadow-md flex flex-col justify-between space-y-6">
+                <!-- Task Header & Type Instructions -->
+                <div>
+                    <div class="flex items-center space-x-2 text-xs font-bold uppercase text-slate-400 mb-2">
+                        <span id="q-category-tag">Multiple Choice Task</span>
+                        <span>•</span>
+                        <span id="q-difficulty-tag">B1 Standard</span>
+                    </div>
+                    <h3 id="q-instruction-text" class="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-snug mb-4">
+                        Select the correct word to complete the sentence.
+                    </h3>
+
+                    <!-- Question Prompt Context Box -->
+                    <div class="p-5 sm:p-6 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700/80 text-slate-800 dark:text-slate-100 text-lg sm:text-xl font-medium leading-relaxed" id="q-prompt-box">
+                        Loading question...
+                    </div>
+                </div>
+
+                <!-- Input / Selection Form Area -->
+                <div id="q-answer-area" class="space-y-4">
+                    <!-- Dynamic input controls (MC options or text input) will be injected here -->
+                </div>
+
+                <!-- Feedback & Grammar Explanation Box (Hidden until answer submitted) -->
+                <div id="q-feedback-box" class="hidden rounded-2xl p-5 border transition-all animate-fadeIn">
+                    <div class="flex items-start space-x-3 mb-3">
+                        <div id="feedback-icon" class="w-8 h-8 rounded-full flex items-center justify-center text-lg text-white font-bold flex-shrink-0">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <div>
+                            <h4 id="feedback-title" class="font-bold text-base">Correct Answer!</h4>
+                            <p id="feedback-comparison" class="text-xs font-medium opacity-90 mt-0.5">Your answer: X | Correct key: X</p>
+                        </div>
+                    </div>
+                    <div class="pt-3 border-t border-slate-200/50 dark:border-slate-700/50">
+                        <p class="text-xs font-bold uppercase tracking-wider mb-1 text-slate-500 dark:text-slate-400">Grammar Rule & Explanation:</p>
+                        <p id="feedback-explanation" class="text-sm leading-relaxed text-slate-700 dark:text-slate-200">
+                            Detailed grammar explanation note...
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Action Footer -->
+                <div class="pt-4 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between">
+                    <button id="btn-prev-q" class="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold text-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition disabled:opacity-40">
+                        <i class="fa-solid fa-chevron-left mr-1.5"></i> Previous
+                    </button>
+
+                    <div class="flex items-center space-x-2">
+                        <button id="btn-skip-q" class="px-4 py-2.5 rounded-xl border border-amber-300 dark:border-amber-700/60 bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-300 font-semibold text-sm hover:bg-amber-100 dark:hover:bg-amber-900/40 transition flex items-center">
+                            <i class="fa-solid fa-forward-step mr-1.5"></i> I don't know / Skip
+                        </button>
+                        <button id="btn-submit-q" class="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-500/20 transition flex items-center">
+                            <span>Check Answer</span>
+                            <span class="ml-2 text-xs bg-white/20 px-2 py-0.5 rounded font-mono hidden sm:inline">Enter ↵</span>
+                        </button>
+                        <button id="btn-next-q" class="hidden px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-md shadow-indigo-500/20 transition flex items-center">
+                            <span>Next Question</span>
+                            <i class="fa-solid fa-chevron-right ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== VIEW 3: SCORECARD / RESULTS ==================== -->
+        <section id="view-results" class="hidden flex-col space-y-8 animate-fadeIn">
+            <!-- Scorecard Header Card -->
+            <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-10 border border-slate-200 dark:border-slate-700/60 shadow-xl text-center space-y-6 relative overflow-hidden">
+                <div class="inline-flex p-4 rounded-3xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 text-4xl mb-2">
+                    <i class="fa-solid fa-award" id="results-icon"></i>
+                </div>
+
+                <div>
+                    <h2 class="text-2xl sm:text-4xl font-extrabold text-slate-900 dark:text-white" id="results-headline">
+                        Érettségi Exam Complete!
+                    </h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1" id="results-student-subtitle">
+                        Student Performance Summary for <span class="font-semibold text-slate-800 dark:text-slate-200" id="res-student-name">Student</span>
+                    </p>
+                </div>
+
+                <!-- Big Grade Badge & Score -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto pt-2">
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700">
+                        <span class="block text-xs font-semibold text-slate-400 uppercase">Final Score</span>
+                        <span class="text-3xl font-black text-slate-900 dark:text-white" id="res-score-fraction">18 / 20</span>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700">
+                        <span class="block text-xs font-semibold text-slate-400 uppercase">Percentage</span>
+                        <span class="text-3xl font-black text-blue-600 dark:text-blue-400" id="res-score-percentage">90%</span>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-700">
+                        <span class="block text-xs font-semibold text-slate-400 uppercase">Official Érettségi Grade</span>
+                        <span class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400" id="res-Érettségi-grade">Grade 5 (Excellent)</span>
+                    </div>
+                </div>
+
+                <!-- Performance Breakdown by Category -->
+                <div class="max-w-xl mx-auto bg-slate-50 dark:bg-slate-900/40 rounded-2xl p-4 border border-slate-200 dark:border-slate-700/50 text-left space-y-3">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Category Breakdown</h4>
+                    <div id="res-category-breakdown" class="space-y-2 text-sm">
+                        <!-- Dynamic category breakdown rows -->
+                    </div>
+                </div>
+
+                <!-- Teacher Report Unlock Progress -->
+                <div id="unlock-progress-results" class="max-w-xl mx-auto bg-slate-50 dark:bg-slate-900/40 rounded-2xl p-4 border border-slate-200 dark:border-slate-700/50 text-left space-y-3"></div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap items-center justify-center gap-3 pt-4 border-t border-slate-100 dark:border-slate-700/50">
+                    <button id="btn-review-mistakes" class="px-5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 font-bold text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition flex items-center">
+                        <i class="fa-solid fa-triangle-exclamation mr-2 text-amber-500"></i> Review Mistakes
+                    </button>
+                    
+                    <button id="btn-open-certificate" class="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20 transition flex items-center">
+                        <i class="fa-solid fa-certificate mr-2"></i> Official Certificate
+                    </button>
+
+                    <button id="btn-copy-report" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-md shadow-indigo-600/20 transition flex items-center">
+                        <i class="fa-solid fa-copy mr-2"></i> Copy Teacher Report
+                    </button>
+
+                    <button id="btn-results-home" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md shadow-blue-500/20 transition flex items-center">
+                        <i class="fa-solid fa-house mr-2"></i> Return to Dashboard
+                    </button>
+                </div>
+            </div>
+
+            <!-- Review Section (Appears when Review Mistakes clicked) -->
+            <div id="review-mistakes-container" class="hidden space-y-4">
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white flex items-center">
+                    <i class="fa-solid fa-magnifying-glass mr-2 text-blue-500"></i> Detailed Answer Review
+                </h3>
+                <div id="review-questions-list" class="space-y-4">
+                    <!-- Dynamic review items -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ==================== MANDATORY STUDENT NAME MODAL ==================== -->
+    <div id="modal-name-entry" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden">
+        <div class="bg-white dark:bg-slate-800 rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-200 dark:border-slate-700 shadow-2xl space-y-6 animate-fadeIn">
+            <div class="text-center space-y-2">
+                <div class="w-14 h-14 rounded-2xl bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 text-2xl flex items-center justify-center mx-auto">
+                    <i class="fa-solid fa-user-graduate"></i>
+                </div>
+                <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white">Welcome Student!</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400">
+                    Please enter your full official name to initialize your B1 Érettségi Practice profile and generate certificates.
+                </p>
+            </div>
+
+            <form id="form-name-entry" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-1.5">
+                        Full Student Name <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="input-student-fullname" placeholder="e.g. Anna Kovács" required minlength="2" class="w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none text-sm font-semibold transition">
+                    <p id="name-validation-error" class="hidden text-xs text-red-500 font-medium mt-1">Please enter a valid full name (at least 2 letters, not 'Guest').</p>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-lg shadow-blue-500/25 transition">
+                    Save Profile & Start Practice
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== TEACHER REPORT MODAL ==================== -->
+    <div id="modal-report" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden overflow-y-auto">
+        <div class="relative bg-white dark:bg-slate-900 rounded-3xl max-w-xl w-full border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 my-8 space-y-4">
+            <button id="btn-close-report" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-white flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="text-xl font-extrabold text-slate-900 dark:text-white">Your Teacher Report</h3>
+            <pre id="report-preview" class="whitespace-pre-wrap text-xs sm:text-sm font-mono bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-100 rounded-2xl p-4 border border-slate-200 dark:border-slate-700"></pre>
+            <div class="flex justify-end">
+                <button id="btn-report-modal-copy" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm shadow-md shadow-indigo-600/20 transition flex items-center">
+                    <i class="fa-solid fa-copy mr-2"></i> Copy Teacher Report
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== PRINTABLE CERTIFICATE MODAL ==================== -->
+    <div id="modal-certificate" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md hidden overflow-y-auto">
+        <div class="relative bg-white dark:bg-slate-900 rounded-3xl max-w-3xl w-full border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-10 my-8">
+            <!-- Modal Close Button -->
+            <button id="btn-close-cert" class="no-print absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-800 dark:hover:text-white flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- PRINTABLE CERTIFICATE CARD CONTENT -->
+            <div id="printable-certificate-container" class="border-8 border-double border-slate-800 dark:border-slate-300 p-8 text-center space-y-6 relative bg-gradient-to-b from-amber-50/30 to-white text-slate-900">
+                <!-- Decorative Corner Accents -->
+                <div class="text-xs font-bold uppercase tracking-widest text-slate-500">Official B1 English Certificate</div>
+                
+                <h2 class="font-serif-title text-3xl sm:text-4xl font-bold tracking-wider text-slate-900 uppercase">
+                    Certificate of Completion
+                </h2>
+                <p class="text-xs uppercase tracking-widest text-slate-500">Hungarian Érettségi B1 English Standard</p>
+
+                <div class="w-24 h-0.5 bg-amber-500 mx-auto"></div>
+
+                <p class="text-sm text-slate-600 italic">This certifies that</p>
+                <h3 class="text-2xl sm:text-3xl font-extrabold text-blue-900 underline decoration-amber-400 decoration-2 underline-offset-8" id="cert-student-name">
+                    Student Name
+                </h3>
+
+                <p class="text-sm text-slate-700 max-w-lg mx-auto leading-relaxed">
+                    has successfully completed the B1 Use of English Érettségi Examination Practice with the following evaluated result:
+                </p>
+
+                <!-- Result Badge -->
+                <div class="py-3 px-6 bg-slate-100 dark:bg-slate-800/20 rounded-2xl max-w-md mx-auto border border-slate-300">
+                    <p class="text-xs uppercase tracking-wider text-slate-500 font-bold">Evaluated Érettségi Grade</p>
+                    <p class="text-2xl font-black text-emerald-700" id="cert-Érettségi-grade">Grade 5 (Excellent)</p>
+                    <p class="text-xs text-slate-600 mt-1 font-semibold" id="cert-score-details">Score: 90% (18/20 questions)</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-8 pt-6 text-xs text-slate-500 border-t border-slate-200">
+                    <div>
+                        <p class="font-bold uppercase tracking-wider text-slate-700">Date Issued</p>
+                        <p id="cert-date-issued">October 2026</p>
+                    </div>
+                    <div>
+                        <p class="font-bold uppercase tracking-wider text-slate-700">Verification Hash</p>
+                        <p id="cert-hash-code" class="font-mono">B1-Érettségi-2026-X89A</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Bottom Actions -->
+            <div class="no-print pt-6 flex justify-end space-x-3 border-t border-slate-200 dark:border-slate-800 mt-6">
+                <button id="btn-print-cert" class="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md transition flex items-center">
+                    <i class="fa-solid fa-print mr-2"></i> Print / Save PDF
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const B1_QUESTION_BANK = [
+            // --- FE1: MULTIPLE CHOICE QUESTIONS (100 TASKS) ---
+            { id: 'mc_1', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '1. The plane took [ _____ ] at noon.', options: ['A) off', 'B) away', 'C) out', 'D) up'], answer: 'A', explanation: 'Correct answer: A (off) - Phrasal verb "take off" means to leave the ground.' },
+            { id: 'mc_2', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '2. If I [ _____ ] a million pounds, I would buy an island.', options: ['A) have', 'B) had', 'C) will have', 'D) would have'], answer: 'B', explanation: 'Correct answer: B (had) - Second Conditional rule (If + Past Simple, would + verb).' },
+            { id: 'mc_3', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '3. I have [ _____ ] friends here, so I feel lonely.', options: ['A) a few', 'B) a little', 'C) few', 'D) little'], answer: 'C', explanation: 'Correct answer: C (few) - "Few" indicates almost none (negative connotation with countable nouns).' },
+            { id: 'mc_4', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '4. She gave [ _____ ] smoking last year.', options: ['A) up', 'B) in', 'C) out', 'D) away'], answer: 'A', explanation: 'Correct answer: A (up) - Phrasal verb "give up" means to stop doing something.' },
+            { id: 'mc_5', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '5. He stopped [ _____ ] because he felt ill.', options: ['A) running', 'B) to run', 'C) run', 'D) ran'], answer: 'A', explanation: 'Correct answer: A (running) - Stop + gerund means to quit an action.' },
+            { id: 'mc_6', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '6. The teacher told us [ _____ ] talk during the test.', options: ['A) don\'t', 'B) to not', 'C) not to', 'D) no'], answer: 'C', explanation: 'Correct answer: C (not to) - Reported imperative structure: tell someone not to do something.' },
+            { id: 'mc_7', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '7. I\'m looking forward to [ _____ ] you.', options: ['A) see', 'B) saw', 'C) to see', 'D) seeing'], answer: 'D', explanation: 'Correct answer: D (seeing) - Expression "look forward to" requires verb + -ing.' },
+            { id: 'mc_8', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '8. I\'m used to [ _____ ] up early.', options: ['A) get', 'B) got', 'C) getting', 'D) to get'], answer: 'C', explanation: 'Correct answer: C (getting) - "Be used to" is followed by a gerund (-ing).' },
+            { id: 'mc_9', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '9. I\'m interested [ _____ ] photography.', options: ['A) on', 'B) at', 'C) in', 'D) of'], answer: 'C', explanation: 'Correct answer: C (in) - Preposition dependency: interested in something.' },
+            { id: 'mc_10', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '10. My parents let me [ _____ ] out late.', options: ['A) to stay', 'B) staying', 'C) stay', 'D) stayed'], answer: 'C', explanation: 'Correct answer: C (stay) - Verb "let" takes bare infinitive (let + object + base verb).' },
+            { id: 'mc_11', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '11. This church [ _____ ] in 1850.', options: ['A) built', 'B) is built', 'C) has built', 'D) was built'], answer: 'D', explanation: 'Correct answer: D (was built) - Past Simple Passive voice.' },
+            { id: 'mc_12', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '12. The letters [ _____ ] yet.', options: ['A) haven\'t sent', 'B) aren\'t sent', 'C) haven\'t been sent', 'D) didn\'t sent'], answer: 'C', explanation: 'Correct answer: C (haven\'t been sent) - Present Perfect Passive voice with "yet".' },
+            { id: 'mc_13', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '13. [ _____ ] I borrow your pen, please?', options: ['A) Must', 'B) Could', 'C) Shall', 'D) Would'], answer: 'B', explanation: 'Correct answer: B (Could) - Polite request form.' },
+            { id: 'mc_14', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '14. It was [ _____ ] a good film that we saw it twice.', options: ['A) so', 'B) too', 'C) such', 'D) very'], answer: 'C', explanation: 'Correct answer: C (such) - Pattern: such + a/an + adjective + noun + that.' },
+            { id: 'mc_15', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '15. This time next week, I [ _____ ] on a beach in Greece.', options: ['A) lie', 'B) have lain', 'C) lay', 'D) will be lying'], answer: 'D', explanation: 'Correct answer: D (will be lying) - Future Continuous tense for action in progress in future.' },
+            { id: 'mc_16', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '16. My bike [ _____ ] stolen last night.', options: ['A) has been', 'B) was', 'C) is', 'D) were'], answer: 'B', explanation: 'Correct answer: B (was) - Past Simple Passive for completed past action.' },
+            { id: 'mc_17', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '17. She works hard [ _____ ] she can pass the exam.', options: ['A) so that', 'B) because of', 'C) although', 'D) despite'], answer: 'A', explanation: 'Correct answer: A (so that) - Clause of purpose.' },
+            { id: 'mc_18', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '18. Look! It [ _____ ] outside.', options: ['A) rains', 'B) is raining', 'C) rained', 'D) has rained'], answer: 'B', explanation: 'Correct answer: B (is raining) - Present Continuous for action happening now.' },
+            { id: 'mc_19', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '19. I\'ve lived here [ _____ ] 2018.', options: ['A) for', 'B) since', 'C) from', 'D) in'], answer: 'B', explanation: 'Correct answer: B (since) - Indicates starting point of time in Present Perfect.' },
+            { id: 'mc_20', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '20. I made this cake [ _____ ].', options: ['A) myself', 'B) me', 'C) mine', 'D) my'], answer: 'A', explanation: 'Correct answer: A (myself) - Reflexive pronoun.' },
+            { id: 'mc_21', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '21. If it rains tomorrow, we [ _____ ] the match.', options: ['A) cancelled', 'B) will cancel', 'C) would cancel', 'D) had cancelled'], answer: 'B', explanation: 'Correct answer: B (will cancel) - First Conditional structure.' },
+            { id: 'mc_22', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '22. She suggested [ _____ ] to the cinema.', options: ['A) to go', 'B) going', 'C) go', 'D) went'], answer: 'B', explanation: 'Correct answer: B (going) - Verb "suggest" is followed by a gerund.' },
+            { id: 'mc_23', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '23. We arrived [ _____ ] the airport at six.', options: ['A) at', 'B) in', 'C) to', 'D) on'], answer: 'A', explanation: 'Correct answer: A (at) - Arrive at a location/building.' },
+            { id: 'mc_24', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '24. The phone is ringing. It [ _____ ] be Anna; she said she would call.', options: ['A) can\'t', 'B) shouldn\'t', 'C) mustn\'t', 'D) must'], answer: 'D', explanation: 'Correct answer: D (must) - Modal verb for logical deduction/certainty.' },
+            { id: 'mc_25', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '25. She can swim, [ _____ ]?', options: ['A) doesn\'t she', 'B) isn\'t she', 'C) can she', 'D) can\'t she'], answer: 'D', explanation: 'Correct answer: D (can\'t she) - Question tag for positive sentence with modal "can".' },
+            { id: 'mc_26', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '26. She is [ _____ ] tired to walk any further.', options: ['A) very', 'B) too', 'C) enough', 'D) so'], answer: 'B', explanation: 'Correct answer: B (too) - Structure: too + adjective + to-infinitive.' },
+            { id: 'mc_27', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '27. It\'s one of [ _____ ] places in the country.', options: ['A) more beautiful', 'B) most beautiful', 'C) the most beautiful', 'D) the beautifullest'], answer: 'C', explanation: 'Correct answer: C (the most beautiful) - Superlative degree of long adjectives.' },
+            { id: 'mc_28', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '28. She is [ _____ ] than her sister.', options: ['A) tall', 'B) tallest', 'C) more tall', 'D) taller'], answer: 'D', explanation: 'Correct answer: D (taller) - Comparative degree of short adjective.' },
+            { id: 'mc_29', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '29. It\'s too cold [ _____ ] in the lake.', options: ['A) swimming', 'B) swim', 'C) for swim', 'D) to swim'], answer: 'D', explanation: 'Correct answer: D (to swim) - Too + adjective + to-infinitive.' },
+            { id: 'mc_30', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '30. This is the [ _____ ] film I have ever seen.', options: ['A) bad', 'B) worst', 'C) worse', 'D) most bad'], answer: 'B', explanation: 'Correct answer: B (worst) - Irregular superlative form of "bad".' },
+            { id: 'mc_31', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '31. We [ _____ ] each other for ten years.', options: ['A) know', 'B) knew', 'C) are knowing', 'D) have known'], answer: 'D', explanation: 'Correct answer: D (have known) - Present Perfect state verb with duration.' },
+            { id: 'mc_32', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '32. That\'s the girl [ _____ ] bag was stolen.', options: ['A) who', 'B) which', 'C) whose', 'D) what'], answer: 'C', explanation: 'Correct answer: C (whose) - Possessive relative pronoun.' },
+            { id: 'mc_33', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '33. He was born [ _____ ] 1998.', options: ['A) on', 'B) in', 'C) at', 'D) by'], answer: 'B', explanation: 'Correct answer: B (in) - Preposition "in" used for years.' },
+            { id: 'mc_34', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '34. He has worked here [ _____ ] three years.', options: ['A) since', 'B) for', 'C) during', 'D) from'], answer: 'B', explanation: 'Correct answer: B (for) - Preposition "for" with period of time.' },
+            { id: 'mc_35', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '35. I [ _____ ] my homework yet.', options: ['A) haven\'t finished', 'B) don\'t finish', 'C) didn\'t finish', 'D) wasn\'t finishing'], answer: 'A', explanation: 'Correct answer: A (haven\'t finished) - Present Perfect tense with "yet".' },
+            { id: 'mc_36', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '36. Can you look [ _____ ] my dog while I\'m away?', options: ['A) for', 'B) at', 'C) after', 'D) up'], answer: 'C', explanation: 'Correct answer: C (after) - Phrasal verb "look after" means to take care of.' },
+            { id: 'mc_37', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '37. I stayed at home [ _____ ] it was raining.', options: ['A) because', 'B) so', 'C) but', 'D) although'], answer: 'A', explanation: 'Correct answer: A (because) - Conjunction showing cause.' },
+            { id: 'mc_38', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '38. What would you do if you [ _____ ] your wallet?', options: ['A) lose', 'B) will lose', 'C) lost', 'D) have lost'], answer: 'C', explanation: 'Correct answer: C (lost) - Second Conditional (if + past simple).' },
+            { id: 'mc_39', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '39. He isn\'t as [ _____ ] as his brother.', options: ['A) older', 'B) oldest', 'C) elder', 'D) old'], answer: 'D', explanation: 'Correct answer: D (old) - Equality comparison: as + base adjective + as.' },
+            { id: 'mc_40', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '40. I [ _____ ] TV when the lights went out.', options: ['A) watched', 'B) have watched', 'C) was watching', 'D) watch'], answer: 'C', explanation: 'Correct answer: C (was watching) - Past Continuous interrupted by Past Simple.' },
+            { id: 'mc_41', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '41. We watched [ _____ ] film you recommended.', options: ['A) a', 'B) an', 'C) some', 'D) the'], answer: 'D', explanation: 'Correct answer: D (the) - Definite article for specific item.' },
+            { id: 'mc_42', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '42. I need [ _____ ] advice about my homework.', options: ['A) some', 'B) a', 'C) an', 'D) many'], answer: 'A', explanation: 'Correct answer: A (some) - Advice is uncountable.' },
+            { id: 'mc_43', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '43. She gave me a gift, [ _____ ] was a surprise.', options: ['A) that', 'B) which', 'C) who', 'D) what'], answer: 'B', explanation: 'Correct answer: B (which) - Non-defining relative clause referring to whole sentence.' },
+            { id: 'mc_44', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '44. If I were you, I [ _____ ] that job.', options: ['A) will take', 'B) took', 'C) have taken', 'D) would take'], answer: 'D', explanation: 'Correct answer: D (would take) - Second Conditional advice structure.' },
+            { id: 'mc_45', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '45. I\'ll call you as soon as I [ _____ ] home.', options: ['A) get', 'B) will get', 'C) would get', 'D) am getting'], answer: 'A', explanation: 'Correct answer: A (get) - Time clause uses Present Simple for future.' },
+            { id: 'mc_46', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '46. I had my car [ _____ ] yesterday.', options: ['A) repair', 'B) repairing', 'C) to repair', 'D) repaired'], answer: 'D', explanation: 'Correct answer: D (repaired) - Causative structure: have + object + past participle.' },
+            { id: 'mc_47', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '47. She doesn\'t have [ _____ ] money left.', options: ['A) many', 'B) a few', 'C) few', 'D) much'], answer: 'D', explanation: 'Correct answer: D (much) - Quantifier "much" used with uncountable nouns in negative sentences.' },
+            { id: 'mc_48', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '48. There are [ _____ ] students in the class – about forty.', options: ['A) a lot of', 'B) too much', 'C) much', 'D) a little'], answer: 'A', explanation: 'Correct answer: A (a lot of) - Quantifier for countable plural nouns.' },
+            { id: 'mc_49', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '49. [ _____ ] it was cold, we went swimming.', options: ['A) Because', 'B) Although', 'C) So', 'D) Despite'], answer: 'B', explanation: 'Correct answer: B (Although) - Concession clause before clause with subject and verb.' },
+            { id: 'mc_50', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '50. How long [ _____ ] English?', options: ['A) have you been learning', 'B) do you learn', 'C) are you learning', 'D) did you learn'], answer: 'A', explanation: 'Correct answer: A (have you been learning) - Present Perfect Continuous for duration up to now.' },
+            { id: 'mc_51', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '51. English [ _____ ] all over the world.', options: ['A) speaks', 'B) was spoken', 'C) is spoken', 'D) has spoken'], answer: 'C', explanation: 'Correct answer: C (is spoken) - Present Simple Passive.' },
+            { id: 'mc_52', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '52. You [ _____ ] wear a seat belt in the car. It\'s the law.', options: ['A) can', 'B) might', 'C) would', 'D) must'], answer: 'D', explanation: 'Correct answer: D (must) - Modal verb for obligation/law.' },
+            { id: 'mc_53', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '53. He was tired, [ _____ ] he went to bed early.', options: ['A) because', 'B) so', 'C) although', 'D) however'], answer: 'B', explanation: 'Correct answer: B (so) - Conjunction showing result.' },
+            { id: 'mc_54', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '54. [ _____ ] the rain, we played football.', options: ['A) Although', 'B) Because', 'C) Despite', 'D) However'], answer: 'C', explanation: 'Correct answer: C (Despite) - Followed by noun phrase.' },
+            { id: 'mc_55', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '55. I\'m hungry. I [ _____ ] like a sandwich.', options: ['A) will', 'B) would', 'C) do', 'D) am'], answer: 'B', explanation: 'Correct answer: B (would) - "Would like" polite expression for wanting something.' },
+            { id: 'mc_56', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '56. Sam runs [ _____ ] than I do.', options: ['A) fast', 'B) faster', 'C) fastest', 'D) more fast'], answer: 'B', explanation: 'Correct answer: B (faster) - Comparative form of adverb "fast".' },
+            { id: 'mc_57', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '57. How [ _____ ] people came to the party?', options: ['A) many', 'B) much', 'C) a lot', 'D) little'], answer: 'A', explanation: 'Correct answer: A (many) - Question quantifier with plural countable nouns.' },
+            { id: 'mc_58', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '58. She decided [ _____ ] a new car.', options: ['A) buying', 'B) to buy', 'C) buy', 'D) bought'], answer: 'B', explanation: 'Correct answer: B (to buy) - Verb "decide" takes to-infinitive.' },
+            { id: 'mc_59', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '59. We need [ _____ ] some milk.', options: ['A) buying', 'B) to buy', 'C) buy', 'D) bought'], answer: 'B', explanation: 'Correct answer: B (to buy) - Verb "need" takes to-infinitive.' },
+            { id: 'mc_60', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '60. By the time I got home, my parents [ _____ ] to bed.', options: ['A) went', 'B) have gone', 'C) had gone', 'D) were going'], answer: 'C', explanation: 'Correct answer: C (had gone) - Past Perfect for action completed before another past action.' },
+            { id: 'mc_61', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '61. Please switch [ _____ ] the computer when you leave.', options: ['A) away', 'B) up', 'C) down', 'D) off'], answer: 'D', explanation: 'Correct answer: D (off) - Phrasal verb "switch off" means to turn off power.' },
+            { id: 'mc_62', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '62. The man [ _____ ] lives next door is a doctor.', options: ['A) which', 'B) who', 'C) whose', 'D) whom'], answer: 'B', explanation: 'Correct answer: B (who) - Relative pronoun for people.' },
+            { id: 'mc_63', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '63. He [ _____ ] to the gym three times a week.', options: ['A) went', 'B) has gone', 'C) going', 'D) goes'], answer: 'D', explanation: 'Correct answer: D (goes) - Present Simple for regular routines.' },
+            { id: 'mc_64', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '64. I\'m good [ _____ ] maths.', options: ['A) at', 'B) in', 'C) on', 'D) with'], answer: 'A', explanation: 'Correct answer: A (at) - Preposition dependency: good at something.' },
+            { id: 'mc_65', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '65. He isn\'t old [ _____ ] to drive.', options: ['A) too', 'B) very', 'C) enough', 'D) so'], answer: 'C', explanation: 'Correct answer: C (enough) - Adjective + enough + to-infinitive.' },
+            { id: 'mc_66', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '66. She is married [ _____ ] a teacher.', options: ['A) with', 'B) to', 'C) by', 'D) for'], answer: 'B', explanation: 'Correct answer: B (to) - Preposition dependency: married to someone.' },
+            { id: 'mc_67', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '67. My birthday is [ _____ ] 5 May.', options: ['A) in', 'B) at', 'C) on', 'D) by'], answer: 'C', explanation: 'Correct answer: C (on) - Preposition "on" used for specific dates.' },
+            { id: 'mc_68', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '68. I\'ll lend you the book [ _____ ] you promise to return it.', options: ['A) unless', 'B) although', 'C) while', 'D) as long as'], answer: 'D', explanation: 'Correct answer: D (as long as) - Conjunction meaning "provided that".' },
+            { id: 'mc_69', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '69. I remember [ _____ ] this song when I was a child.', options: ['A) hear', 'B) to hear', 'C) hearing', 'D) heard'], answer: 'C', explanation: 'Correct answer: C (hearing) - Remember + gerund = memory of past event.' },
+            { id: 'mc_70', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '70. This is the village [ _____ ] I was born.', options: ['A) which', 'B) where', 'C) who', 'D) when'], answer: 'B', explanation: 'Correct answer: B (where) - Relative adverb for places.' },
+            { id: 'mc_71', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '71. [ _____ ] of the two shirts did you buy?', options: ['A) Which', 'B) What', 'C) Who', 'D) Whose'], answer: 'A', explanation: 'Correct answer: A (Which) - Question word for choice among limited set.' },
+            { id: 'mc_72', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '72. She [ _____ ] me that she was leaving.', options: ['A) said', 'B) spoke', 'C) talked', 'D) told'], answer: 'D', explanation: 'Correct answer: D (told) - Requires indirect personal object (told me).' },
+            { id: 'mc_73', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '73. You will be late unless you [ _____ ] now.', options: ['A) will leave', 'B) don\'t leave', 'C) leave', 'D) would leave'], answer: 'C', explanation: 'Correct answer: C (leave) - "Unless" means "if not" and takes affirmative verb.' },
+            { id: 'mc_74', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '74. I enjoy [ _____ ] to music.', options: ['A) listening', 'B) listen', 'C) to listen', 'D) listened'], answer: 'A', explanation: 'Correct answer: A (listening) - Verb "enjoy" is followed by gerund (-ing).' },
+            { id: 'mc_75', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '75. You don\'t like coffee, [ _____ ]?', options: ['A) don\'t you', 'B) aren\'t you', 'C) do you', 'D) are you'], answer: 'C', explanation: 'Correct answer: C (do you) - Positive tag for negative statement in Present Simple.' },
+            { id: 'mc_76', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '76. The room [ _____ ] at the moment.', options: ['A) cleans', 'B) cleaned', 'C) is being cleaned', 'D) has cleaned'], answer: 'C', explanation: 'Correct answer: C (is being cleaned) - Present Continuous Passive.' },
+            { id: 'mc_77', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '77. If she [ _____ ] harder, she would have passed the exam.', options: ['A) had studied', 'B) studies', 'C) studied', 'D) would study'], answer: 'A', explanation: 'Correct answer: A (had studied) - Third Conditional condition clause (if + Past Perfect).' },
+            { id: 'mc_78', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '78. There isn\'t [ _____ ] milk in the fridge.', options: ['A) any', 'B) some', 'C) many', 'D) a'], answer: 'A', explanation: 'Correct answer: A (any) - Quantifier "any" in negative sentences with uncountable nouns.' },
+            { id: 'mc_79', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '79. My uncle, [ _____ ] lives in Canada, is visiting us.', options: ['A) that', 'B) who', 'C) which', 'D) whose'], answer: 'B', explanation: 'Correct answer: B (who) - Non-defining relative clause for person.' },
+            { id: 'mc_80', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '80. When we arrived at the station, the train [ _____ ].', options: ['A) had left', 'B) has left', 'C) was leaving', 'D) leaves'], answer: 'A', explanation: 'Correct answer: A (had left) - Past Perfect for action prior to another past action.' },
+            { id: 'mc_81', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '81. I can\'t put [ _____ ] with this noise any longer.', options: ['A) on', 'B) off', 'C) out', 'D) up'], answer: 'D', explanation: 'Correct answer: D (up) - Phrasal verb "put up with" means to tolerate.' },
+            { id: 'mc_82', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '82. I don\'t know this word. I\'ll look it [ _____ ] in a dictionary.', options: ['A) after', 'B) for', 'C) up', 'D) at'], answer: 'C', explanation: 'Correct answer: C (up) - Phrasal verb "look up" means to search in dictionary.' },
+            { id: 'mc_83', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '83. The [ _____ ] you practise, the better you play.', options: ['A) most', 'B) much', 'C) more', 'D) many'], answer: 'C', explanation: 'Correct answer: C (more) - Double comparative structure: The more ..., the better ...' },
+            { id: 'mc_84', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '84. I [ _____ ] swim when I was five.', options: ['A) can', 'B) am able', 'C) must', 'D) could'], answer: 'D', explanation: 'Correct answer: D (could) - Past ability.' },
+            { id: 'mc_85', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '85. This is the book [ _____ ] I told you about.', options: ['A) who', 'B) whose', 'C) where', 'D) which'], answer: 'D', explanation: 'Correct answer: D (which) - Relative pronoun for things.' },
+            { id: 'mc_86', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '86. He\'s good at [ _____ ] jokes.', options: ['A) telling', 'B) tell', 'C) to tell', 'D) told'], answer: 'A', explanation: 'Correct answer: A (telling) - Preposition "at" followed by gerund.' },
+            { id: 'mc_87', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '87. You [ _____ ] park here. It\'s forbidden.', options: ['A) mustn\'t', 'B) don\'t have to', 'C) needn\'t', 'D) might not'], answer: 'A', explanation: 'Correct answer: A (mustn\'t) - Prohibition.' },
+            { id: 'mc_88', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '88. We [ _____ ] hurry. We have plenty of time.', options: ['A) mustn\'t', 'B) don\'t have to', 'C) can\'t', 'D) must'], answer: 'B', explanation: 'Correct answer: B (don\'t have to) - Lack of necessity.' },
+            { id: 'mc_89', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '89. I wish I [ _____ ] so much last night.', options: ['A) hadn\'t eaten', 'B) didn\'t eat', 'C) wouldn\'t eat', 'D) don\'t eat'], answer: 'A', explanation: 'Correct answer: A (hadn\'t eaten) - Regret about past situation (I wish + Past Perfect).' },
+            { id: 'mc_90', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '90. She\'s afraid [ _____ ] dogs.', options: ['A) from', 'B) about', 'C) with', 'D) of'], answer: 'D', explanation: 'Correct answer: D (of) - Preposition dependency: afraid of something.' },
+            { id: 'mc_91', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '91. I [ _____ ] him since last Monday.', options: ['A) don\'t see', 'B) didn\'t see', 'C) wasn\'t seeing', 'D) haven\'t seen'], answer: 'D', explanation: 'Correct answer: D (haven\'t seen) - Present Perfect with "since".' },
+            { id: 'mc_92', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '92. She [ _____ ] the report yesterday.', options: ['A) has finished', 'B) finished', 'C) has been finishing', 'D) finishes'], answer: 'B', explanation: 'Correct answer: B (finished) - Past Simple for finished action with specific past time.' },
+            { id: 'mc_93', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '93. My sister is [ _____ ] university student.', options: ['A) a', 'B) an', 'C) the', 'D) some'], answer: 'A', explanation: 'Correct answer: A (a) - "University" starts with a consonant sound /j/.' },
+            { id: 'mc_94', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '94. I [ _____ ] in this town since I was born.', options: ['A) live', 'B) lived', 'C) am living', 'D) have lived'], answer: 'D', explanation: 'Correct answer: D (have lived) - Present Perfect with "since".' },
+            { id: 'mc_95', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '95. We ran [ _____ ] milk, so I went to the shop.', options: ['A) away from', 'B) off', 'C) over', 'D) out of'], answer: 'D', explanation: 'Correct answer: D (out of) - Phrasal verb "run out of" means to exhaust supply.' },
+            { id: 'mc_96', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '96. [ _____ ] Sun rises in the east.', options: ['A) A', 'B) The', 'C) An', 'D) Some'], answer: 'B', explanation: 'Correct answer: B (The) - Unique celestial body takes definite article.' },
+            { id: 'mc_97', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '97. I wish I [ _____ ] more free time.', options: ['A) have', 'B) would have', 'C) had', 'D) will have'], answer: 'C', explanation: 'Correct answer: C (had) - Wish about present state takes Past Simple.' },
+            { id: 'mc_98', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '98. You look tired. You [ _____ ] go to bed early.', options: ['A) should', 'B) ought', 'C) would', 'D) need'], answer: 'A', explanation: 'Correct answer: A (should) - Giving advice.' },
+            { id: 'mc_99', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '99. He asked me [ _____ ] I wanted some coffee.', options: ['A) if', 'B) that', 'C) what', 'D) how'], answer: 'A', explanation: 'Correct answer: A (if) - Reported yes/no question.' },
+            { id: 'mc_100', type: 'fe1', instruction: 'Choose the correct answer (A, B, C or D) to fill the gap.', prompt: '100. The window [ _____ ] by the boys.', options: ['A) broke', 'B) has broke', 'C) was broken', 'D) broken'], answer: 'C', explanation: 'Correct answer: C (was broken) - Past Simple Passive.' },
+
+            // --- FE2: OPEN CLOZE QUESTIONS (100 SENTENCES) ---
+            { id: 'oc_1', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '1. Tom is afraid ______ flying, so he always travels by train.', answer: 'of', explanation: 'Preposition dependency: afraid of something.' },
+            { id: 'oc_2', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '2. It was ______ a lovely day that we decided to go to the beach.', answer: 'such', explanation: 'Structure: such + a/an + adjective + noun + that.' },
+            { id: 'oc_3', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '3. We travelled to Spain ______ plane.', answer: 'by', explanation: 'Preposition "by" used for modes of transport.' },
+            { id: 'oc_4', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '4. I\'m used ______ getting up early.', answer: 'to', explanation: 'Structure: be used to + gerund.' },
+            { id: 'oc_5', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '5. At first I didn\'t like him, but ______ the end we became good friends.', answer: 'in', explanation: 'Phrase: "in the end" means finally.' },
+            { id: 'oc_6', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '6. My uncle plays ______ piano very well.', answer: 'the', explanation: 'Definite article used with musical instruments.' },
+            { id: 'oc_7', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '7. She apologised ______ being late.', answer: 'for', explanation: 'Apologise for + gerund.' },
+            { id: 'oc_8', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '8. If we had left earlier, we wouldn\'t ______ missed the train.', answer: 'have', explanation: 'Third Conditional structure: wouldn\'t + have + past participle.' },
+            { id: 'oc_9', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '9. I\'m really interested ______ old buildings and history.', answer: 'in', explanation: 'Preposition dependency: interested in.' },
+            { id: 'oc_10', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '10. The film was ______ boring that I fell asleep.', answer: 'so', explanation: 'So + adjective + that.' },
+            { id: 'oc_11', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '11. Either you apologise now ______ you leave.', answer: 'or', explanation: 'Correlative conjunction pair: either ... or ...' },
+            { id: 'oc_12', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '12. He insisted ______ paying for the dinner.', answer: 'on', explanation: 'Insist on + gerund.' },
+            { id: 'oc_13', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '13. I\'ve been waiting for the bus ______ half an hour.', answer: 'for', explanation: 'Preposition "for" for duration.' },
+            { id: 'oc_14', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '14. I cut ______ with a knife while I was cooking.', answer: 'myself', explanation: 'Reflexive pronoun myself.' },
+            { id: 'oc_15', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '15. My sister is very good ______ drawing. She wants to study art.', answer: 'at', explanation: 'Good at + gerund/noun.' },
+            { id: 'oc_16', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '16. He taught ______ to play the guitar.', answer: 'himself', explanation: 'Reflexive pronoun himself.' },
+            { id: 'oc_17', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '17. There are only ______ few tickets left, so buy yours quickly.', answer: 'a', explanation: 'Phrase: "a few" means a small number.' },
+            { id: 'oc_18', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '18. They live ______ the third floor of that building.', answer: 'on', explanation: 'Preposition "on" for building floors.' },
+            { id: 'oc_19', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '19. I completely agree ______ you.', answer: 'with', explanation: 'Agree with someone.' },
+            { id: 'oc_20', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '20. As ______ as I know, he lives in Paris.', answer: 'far', explanation: 'Phrase: "as far as I know".' },
+            { id: 'oc_21', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '21. She is old ______ to drive a car.', answer: 'enough', explanation: 'Adjective + enough + to-infinitive.' },
+            { id: 'oc_22', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '22. My sister works as ______ engineer in a big factory.', answer: 'an', explanation: 'Indefinite article "an" before vowel sound.' },
+            { id: 'oc_23', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '23. I must finish this report ______ Friday at the latest.', answer: 'by', explanation: 'Preposition "by" for deadlines.' },
+            { id: 'oc_24', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '24. He worked ______ morning till night.', answer: 'from', explanation: 'From ... till/to ...' },
+            { id: 'oc_25', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '25. That\'s the restaurant ______ we had dinner last Saturday.', answer: 'where', explanation: 'Relative adverb for places.' },
+            { id: 'oc_26', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '26. If you ______ not hurry, you will miss the bus.', answer: 'do', explanation: 'Negative First Conditional present tense.' },
+            { id: 'oc_27', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '27. ______ Sun rises in the east.', answer: 'The', explanation: 'Definite article for unique celestial body.' },
+            { id: 'oc_28', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '28. I like both tea ______ coffee.', answer: 'and', explanation: 'Correlative conjunction: both ... and ...' },
+            { id: 'oc_29', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '29. He asked me ______ much I earned.', answer: 'how', explanation: 'Reported question: how much.' },
+            { id: 'oc_30', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '30. Our teacher told us ______ to be late for the exam.', answer: 'not', explanation: 'Reported negative imperative: told us not to...' },
+            { id: 'oc_31', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '31. This exercise isn\'t as difficult ______ the last one.', answer: 'as', explanation: 'Comparison of equality: as ... as ...' },
+            { id: 'oc_32', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '32. ______ the way, have you heard from Tom?', answer: 'By', explanation: 'Phrase: "By the way".' },
+            { id: 'oc_33', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '33. It takes me half an hour ______ get to school.', answer: 'to', explanation: 'It takes time + to-infinitive.' },
+            { id: 'oc_34', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '34. I\'m not very keen ______ horror films.', answer: 'on', explanation: 'Adjective dependency: keen on.' },
+            { id: 'oc_35', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '35. Could you turn the volume ______ ? I can\'t hear the TV.', answer: 'up', explanation: 'Phrasal verb "turn up" (increase volume).' },
+            { id: 'oc_36', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '36. I was ______ tired to keep my eyes open.', answer: 'too', explanation: 'Too + adjective + to-infinitive.' },
+            { id: 'oc_37', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '37. I have never ______ to Japan, but I would love to go one day.', answer: 'been', explanation: 'Present Perfect "have never been".' },
+            { id: 'oc_38', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '38. Have you ______ been to Australia? – Yes, twice.', answer: 'ever', explanation: 'Adverb "ever" in Present Perfect questions.' },
+            { id: 'oc_39', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '39. Not ______ my friends like football.', answer: 'all', explanation: 'Phrase: "Not all my friends".' },
+            { id: 'oc_40', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '40. Tell me ______ you are late again. I want a good reason.', answer: 'why', explanation: 'Question word for reason.' },
+            { id: 'oc_41', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '41. If I ______ more free time, I would learn to play the guitar.', answer: 'had', explanation: 'Second conditional: If + Past Simple.' },
+            { id: 'oc_42', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '42. He didn\'t pass his driving test, ______ made his parents sad.', answer: 'which', explanation: 'Relative pronoun referring to the clause.' },
+            { id: 'oc_43', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '43. I\'ll call you as soon ______ I arrive.', answer: 'as', explanation: 'Conjunction: "as soon as".' },
+            { id: 'oc_44', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '44. This is the first time I ______ eaten sushi.', answer: 'have', explanation: 'Structure: "It/This is the first time I have + V3".' },
+            { id: 'oc_45', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '45. While we ______ having dinner, the phone rang.', answer: 'were', explanation: 'Past Continuous tense: while we were having...' },
+            { id: 'oc_46', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '46. You look just ______ your mother! You have the same eyes.', answer: 'like', explanation: 'Preposition "like" for similarity.' },
+            { id: 'oc_47', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '47. This is the house in ______ I grew up.', answer: 'which', explanation: 'Preposition + relative pronoun "in which".' },
+            { id: 'oc_48', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '48. How ______ does this T-shirt cost?', answer: 'much', explanation: 'How much for price.' },
+            { id: 'oc_49', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '49. The film is based ______ a true story.', answer: 'on', explanation: 'Based on.' },
+            { id: 'oc_50', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '50. Kate always gets the best marks. She is the ______ intelligent student in our class.', answer: 'most', explanation: 'Superlative degree "the most intelligent".' },
+            { id: 'oc_51', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '51. You ______ better see a doctor about that cough.', answer: 'had', explanation: 'Had better + base verb.' },
+            { id: 'oc_52', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '52. Oh no! Somebody ______ taken my umbrella!', answer: 'has', explanation: 'Present Perfect auxiliary with indefinite pronoun.' },
+            { id: 'oc_53', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '53. The cinema is ______ the bank and the post office.', answer: 'between', explanation: 'Preposition "between X and Y".' },
+            { id: 'oc_54', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '54. That\'s not your pen, it\'s ______ – look, it has my name on it.', answer: 'mine', explanation: 'Possessive pronoun mine.' },
+            { id: 'oc_55', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '55. ______ of these two bags is yours?', answer: 'Which', explanation: 'Question word for choice.' },
+            { id: 'oc_56', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '56. English ______ spoken in many countries around the world.', answer: 'is', explanation: 'Present Simple Passive auxiliary.' },
+            { id: 'oc_57', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '57. We usually go to the seaside ______ July.', answer: 'in', explanation: 'Preposition "in" for months.' },
+            { id: 'oc_58', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '58. Can you look ______ my cat while I\'m on holiday?', answer: 'after', explanation: 'Look after = take care of.' },
+            { id: 'oc_59', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '59. The new shopping centre ______ being built at the moment.', answer: 'is', explanation: 'Present Continuous Passive auxiliary.' },
+            { id: 'oc_60', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '60. When we arrived at the cinema, the film ______ already started.', answer: 'had', explanation: 'Past Perfect auxiliary.' },
+            { id: 'oc_61', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '61. I prefer tea ______ coffee.', answer: 'to', explanation: 'Prefer X to Y.' },
+            { id: 'oc_62', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '62. My phone ______ stolen on the bus yesterday.', answer: 'was', explanation: 'Past Simple Passive auxiliary.' },
+            { id: 'oc_63', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '63. There were very ______ people in the cinema, so we easily found seats.', answer: 'few', explanation: 'Very few + plural noun.' },
+            { id: 'oc_64', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '64. Do you mind ______ I open the window?', answer: 'if', explanation: 'Do you mind if...' },
+            { id: 'oc_65', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '65. We stayed at home ______ of the bad weather.', answer: 'because', explanation: 'Because of + noun phrase.' },
+            { id: 'oc_66', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '66. I\'m fed up ______ this cold weather.', answer: 'with', explanation: 'Fed up with.' },
+            { id: 'oc_67', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '67. She lives ______ her parents in a small flat.', answer: 'with', explanation: 'Live with someone.' },
+            { id: 'oc_68', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '68. Excuse me, can you tell me ______ I can find a post office?', answer: 'where', explanation: 'Indirect question word.' },
+            { id: 'oc_69', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '69. Each ______ the students received a certificate.', answer: 'of', explanation: 'Each of the...' },
+            { id: 'oc_70', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '70. We ran ______ of milk, so I went to the shop.', answer: 'out', explanation: 'Run out of.' },
+            { id: 'oc_71', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '71. My grandfather gave ______ smoking ten years ago.', answer: 'up', explanation: 'Give up = quit.' },
+            { id: 'oc_72', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '72. You will be late ______ you hurry up.', answer: 'unless', explanation: 'Unless = if not.' },
+            { id: 'oc_73', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '73. ______ is the weather like today?', answer: 'What', explanation: 'What ... like?' },
+            { id: 'oc_74', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '74. How ______ cousins have you got?', answer: 'many', explanation: 'How many + plural countable noun.' },
+            { id: 'oc_75', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '75. My brother is three years older ______ me.', answer: 'than', explanation: 'Comparative than.' },
+            { id: 'oc_76', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '76. I\'ll lend you my car as long ______ you drive carefully.', answer: 'as', explanation: 'As long as.' },
+            { id: 'oc_77', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '77. She is tired ______ doing the same job every day.', answer: 'of', explanation: 'Tired of + gerund.' },
+            { id: 'oc_78', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '78. Neither Tom ______ Anna wants to come to the party.', answer: 'nor', explanation: 'Neither ... nor ...' },
+            { id: 'oc_79', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '79. She\'s ______ holiday this week, so she\'s not in the office.', answer: 'on', explanation: 'On holiday.' },
+            { id: 'oc_80', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '80. I\'m looking ______ my keys. Have you seen them?', answer: 'for', explanation: 'Look for = search.' },
+            { id: 'oc_81', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '81. Tell me ______ you want for your birthday.', answer: 'what', explanation: 'Tell me what...' },
+            { id: 'oc_82', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '82. I was born ______ 12 March.', answer: 'on', explanation: 'Preposition "on" for specific dates.' },
+            { id: 'oc_83', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '83. I\'m really looking forward ______ the summer holidays.', answer: 'to', explanation: 'Look forward to.' },
+            { id: 'oc_84', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '84. I haven\'t finished my homework ______. Can you wait a bit?', answer: 'yet', explanation: 'Yet at end of negative sentence.' },
+            { id: 'oc_85', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '85. How long ______ you been waiting here?', answer: 'have', explanation: 'Present Perfect auxiliary.' },
+            { id: 'oc_86', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '86. He is married ______ a famous actress.', answer: 'to', explanation: 'Married to.' },
+            { id: 'oc_87', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '87. You don\'t like spiders, ______ you?', answer: 'do', explanation: 'Question tag.' },
+            { id: 'oc_88', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '88. The shop opens ______ nine o\'clock.', answer: 'at', explanation: 'Preposition "at" for clock times.' },
+            { id: 'oc_89', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '89. I\'d like to speak to the manager, ______ is not in the office today.', answer: 'who', explanation: 'Relative pronoun for person.' },
+            { id: 'oc_90', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '90. We always help ______ other with our homework.', answer: 'each', explanation: 'Each other.' },
+            { id: 'oc_91', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '91. Sorry, I can\'t talk now. I\'m ______ a hurry.', answer: 'in', explanation: 'In a hurry.' },
+            { id: 'oc_92', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '92. ______ the heavy traffic, we arrived on time.', answer: 'Despite', explanation: 'Despite + noun phrase.' },
+            { id: 'oc_93', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '93. I\'ll stay ______ home tonight.', answer: 'at', explanation: 'At home.' },
+            { id: 'oc_94', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '94. The match was put ______ until next week because of the rain.', answer: 'off', explanation: 'Put off = postpone.' },
+            { id: 'oc_95', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '95. What ______ beautiful day!', answer: 'a', explanation: 'Exclamation: What a...' },
+            { id: 'oc_96', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '96. That\'s the girl ______ brother plays in a famous band.', answer: 'whose', explanation: 'Possessive relative pronoun.' },
+            { id: 'oc_97', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '97. There ______ a lot of people in the park yesterday.', answer: 'were', explanation: 'There were + plural noun.' },
+            { id: 'oc_98', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '98. He is not only clever ______ also very funny.', answer: 'but', explanation: 'Not only ... but also ...' },
+            { id: 'oc_99', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '99. It\'s ten years ______ we last met.', answer: 'since', explanation: 'Since for past point in time.' },
+            { id: 'oc_100', type: 'fe2', instruction: 'Complete each sentence with ONE word.', prompt: '100. I ______ to live in a small village, but now I live in the city.', answer: 'used', explanation: 'Used to live.' },
+
+            // --- FE3: WORD FORMATION QUESTIONS (100 SENTENCES) ---
+            { id: 'wf_1', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '1. The [ CONSTRUCT ] of the new bridge took three years.', rootWord: 'CONSTRUCT', answer: 'construction', explanation: 'Noun form: construction.' },
+            { id: 'wf_2', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '2. The [ DEEP ] of the lake is about twenty metres.', rootWord: 'DEEP', answer: 'depth', explanation: 'Noun form: depth.' },
+            { id: 'wf_3', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '3. I was [ SURPRISE ] when I heard the news.', rootWord: 'SURPRISE', answer: 'surprised', explanation: 'Adjective describing feeling: surprised.' },
+            { id: 'wf_4', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '4. I [ COMPLETE ] agree with you; you are right.', rootWord: 'COMPLETE', answer: 'completely', explanation: 'Adverb: completely.' },
+            { id: 'wf_5', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '5. Some mushrooms are [ POISON ], so don\'t eat them.', rootWord: 'POISON', answer: 'poisonous', explanation: 'Adjective form: poisonous.' },
+            { id: 'wf_6', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '6. She plays the piano [ BEAUTIFUL ].', rootWord: 'BEAUTIFUL', answer: 'beautifully', explanation: 'Adverb form: beautifully.' },
+            { id: 'wf_7', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '7. She gave a [ PRESENT ] about the history of our town.', rootWord: 'PRESENT', answer: 'presentation', explanation: 'Noun form: presentation.' },
+            { id: 'wf_8', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '8. She cried all evening because she was very [ HAPPY ] with her exam results.', rootWord: 'HAPPY', answer: 'unhappy', explanation: 'Negative adjective: unhappy.' },
+            { id: 'wf_9', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '9. We had a long [ DISCUSS ] about where to go on holiday.', rootWord: 'DISCUSS', answer: 'discussion', explanation: 'Noun form: discussion.' },
+            { id: 'wf_10', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '10. Always wear a helmet for your own [ SAFE ].', rootWord: 'SAFE', answer: 'safety', explanation: 'Noun form: safety.' },
+            { id: 'wf_11', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '11. This is a [ FAME ] restaurant; many tourists go there.', rootWord: 'FAME', answer: 'famous', explanation: 'Adjective form: famous.' },
+            { id: 'wf_12', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '12. He lost his job and was [ EMPLOY ] for six months.', rootWord: 'EMPLOY', answer: 'unemployed', explanation: 'Negative adjective: unemployed.' },
+            { id: 'wf_13', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '13. His [ KIND ] made him popular with his classmates.', rootWord: 'KIND', answer: 'kindness', explanation: 'Noun form: kindness.' },
+            { id: 'wf_14', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '14. I would [ DEFINITE ] recommend this restaurant.', rootWord: 'DEFINITE', answer: 'definitely', explanation: 'Adverb form: definitely.' },
+            { id: 'wf_15', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '15. Thank you for your [ ASSIST ] with the project.', rootWord: 'ASSIST', answer: 'assistance', explanation: 'Noun form: assistance.' },
+            { id: 'wf_16', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '16. After a long journey, they [ FINAL ] arrived at the hotel.', rootWord: 'FINAL', answer: 'finally', explanation: 'Adverb form: finally.' },
+            { id: 'wf_17', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '17. There was live music and other [ ENTERTAIN ] at the party.', rootWord: 'ENTERTAIN', answer: 'entertainment', explanation: 'Noun form: entertainment.' },
+            { id: 'wf_18', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '18. Her [ DETERMINE ] to win made her train every day.', rootWord: 'DETERMINE', answer: 'determination', explanation: 'Noun form: determination.' },
+            { id: 'wf_19', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '19. The old man was [ HOME ] and slept on the street.', rootWord: 'HOME', answer: 'homeless', explanation: 'Adjective with suffix -less: homeless.' },
+            { id: 'wf_20', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '20. A good [ EDUCATE ] is the key to a better future.', rootWord: 'EDUCATE', answer: 'education', explanation: 'Noun form: education.' },
+            { id: 'wf_21', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '21. He drives very [ CARE ], so I feel safe with him.', rootWord: 'CARE', answer: 'carefully', explanation: 'Adverb form: carefully.' },
+            { id: 'wf_22', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '22. The shop is not [ USUAL ] open on Sundays, but today it is.', rootWord: 'USUAL', answer: 'usually', explanation: 'Adverb form: usually.' },
+            { id: 'wf_23', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '23. I\'m afraid you have [ UNDERSTAND ] my question.', rootWord: 'UNDERSTAND', answer: 'misunderstood', explanation: 'Past participle with prefix mis-: misunderstood.' },
+            { id: 'wf_24', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '24. I have to [ WRITE ] this letter because it has many mistakes.', rootWord: 'WRITE', answer: 'rewrite', explanation: 'Verb with prefix re-: rewrite.' },
+            { id: 'wf_25', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '25. It is [ POSSIBLE ] to live without water.', rootWord: 'POSSIBLE', answer: 'impossible', explanation: 'Negative adjective prefix im-: impossible.' },
+            { id: 'wf_26', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '26. Your answer is [ CORRECT ], so you get no points.', rootWord: 'CORRECT', answer: 'incorrect', explanation: 'Negative adjective prefix in-: incorrect.' },
+            { id: 'wf_27', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '27. [ PERSON ], I think the book was better than the film.', rootWord: 'PERSON', answer: 'Personally', explanation: 'Adverb: Personally.' },
+            { id: 'wf_28', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '28. Don\'t be so [ PATIENT ]; the bus will be here in a minute.', rootWord: 'PATIENT', answer: 'impatient', explanation: 'Negative adjective: impatient.' },
+            { id: 'wf_29', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '29. We had an [ FORGET ] holiday in Spain.', rootWord: 'FORGET', answer: 'unforgettable', explanation: 'Adjective form: unforgettable.' },
+            { id: 'wf_30', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '30. We couldn\'t find a [ SOLVE ] to the problem.', rootWord: 'SOLVE', answer: 'solution', explanation: 'Noun form: solution.' },
+            { id: 'wf_31', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '31. The [ OWN ] of the shop is very friendly.', rootWord: 'OWN', answer: 'owner', explanation: 'Noun form: owner.' },
+            { id: 'wf_32', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '32. Her [ INTELLIGENT ] is amazing; she can learn anything in a minute.', rootWord: 'INTELLIGENT', answer: 'intelligence', explanation: 'Noun form: intelligence.' },
+            { id: 'wf_33', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '33. The map was so [ CONFUSE ] that we got lost.', rootWord: 'CONFUSE', answer: 'confusing', explanation: 'Adjective form: confusing.' },
+            { id: 'wf_34', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '34. The weather was so [ RAIN ] that we stayed at home.', rootWord: 'RAIN', answer: 'rainy', explanation: 'Adjective form: rainy.' },
+            { id: 'wf_35', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '35. She has a lot of [ CONFIDE ] in her ability to win.', rootWord: 'CONFIDE', answer: 'confidence', explanation: 'Noun form: confidence.' },
+            { id: 'wf_36', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '36. She spoke so [ QUIET ] that nobody could hear her.', rootWord: 'QUIET', answer: 'quietly', explanation: 'Adverb form: quietly.' },
+            { id: 'wf_37', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '37. There was a lot of [ CONFUSE ] at the airport because of the strike.', rootWord: 'CONFUSE', answer: 'confusion', explanation: 'Noun form: confusion.' },
+            { id: 'wf_38', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '38. Doctors say that smoking is very [ HARM ].', rootWord: 'HARM', answer: 'harmful', explanation: 'Adjective form: harmful.' },
+            { id: 'wf_39', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '39. [ FORTUNATE ], I forgot my passport at home.', rootWord: 'FORTUNATE', answer: 'Unfortunately', explanation: 'Negative adverb: Unfortunately.' },
+            { id: 'wf_40', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '40. The instructions were [ CLEAR ], so nobody knew what to do.', rootWord: 'CLEAR', answer: 'unclear', explanation: 'Negative adjective: unclear.' },
+            { id: 'wf_41', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '41. Air [ POLLUTE ] is a big problem in many large cities.', rootWord: 'POLLUTE', answer: 'pollution', explanation: 'Noun form: pollution.' },
+            { id: 'wf_42', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '42. His new shoes were very [ COMFORT ], so he took them off.', rootWord: 'COMFORT', answer: 'uncomfortable', explanation: 'Negative adjective: uncomfortable.' },
+            { id: 'wf_43', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '43. The film had a very [ EMOTION ] ending; everybody cried.', rootWord: 'EMOTION', answer: 'emotional', explanation: 'Adjective form: emotional.' },
+            { id: 'wf_44', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '44. I\'m [ INTEREST ] in history; I read about it every day.', rootWord: 'INTEREST', answer: 'interested', explanation: 'Adjective form: interested.' },
+            { id: 'wf_45', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '45. I want to study [ BIOLOGICAL ] at university because I love animals and plants.', rootWord: 'BIOLOGICAL', answer: 'biology', explanation: 'Noun form: biology.' },
+            { id: 'wf_46', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '46. He is a famous [ NOVEL ] who has written ten books.', rootWord: 'NOVEL', answer: 'novelist', explanation: 'Noun form (person): novelist.' },
+            { id: 'wf_47', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '47. It is [ POLITE ] to talk with your mouth full.', rootWord: 'POLITE', answer: 'impolite', explanation: 'Negative adjective prefix im-: impolite.' },
+            { id: 'wf_48', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '48. The [ LONG ] of the table is two metres.', rootWord: 'LONG', answer: 'length', explanation: 'Noun form: length.' },
+            { id: 'wf_49', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '49. Let\'s go to the beach. It\'s a lovely [ SUN ] day!', rootWord: 'SUN', answer: 'sunny', explanation: 'Adjective form: sunny.' },
+            { id: 'wf_50', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '50. My sister plays the violin and wants to be a [ MUSIC ].', rootWord: 'MUSIC', answer: 'musician', explanation: 'Noun form (person): musician.' },
+            { id: 'wf_51', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '51. The [ RESPONSIBLE ] boy broke the window and ran away.', rootWord: 'RESPONSIBLE', answer: 'irresponsible', explanation: 'Negative adjective prefix ir-: irresponsible.' },
+            { id: 'wf_52', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '52. She gave a clear [ EXPLAIN ] of how the machine works.', rootWord: 'EXPLAIN', answer: 'explanation', explanation: 'Noun form: explanation.' },
+            { id: 'wf_53', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '53. She [ SLEEP ] this morning and missed the first lesson.', rootWord: 'SLEEP', answer: 'overslept', explanation: 'Past simple verb with prefix over-: overslept.' },
+            { id: 'wf_54', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '54. Please [ TIGHT ] the rope; it is too loose.', rootWord: 'TIGHT', answer: 'tighten', explanation: 'Verb form with suffix -en: tighten.' },
+            { id: 'wf_55', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '55. The [ WORRY ] boy waited for his mother, who was late.', rootWord: 'WORRY', answer: 'worried', explanation: 'Adjective form: worried.' },
+            { id: 'wf_56', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '56. The [ ARRIVE ] of the train was delayed by an hour.', rootWord: 'ARRIVE', answer: 'arrival', explanation: 'Noun form: arrival.' },
+            { id: 'wf_57', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '57. It\'s very [ DANGER ] to walk alone at night in this area.', rootWord: 'DANGER', answer: 'dangerous', explanation: 'Adjective form: dangerous.' },
+            { id: 'wf_58', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '58. Many [ VOTE ] voted for the new president.', rootWord: 'VOTE', answer: 'voters', explanation: 'Plural noun form: voters.' },
+            { id: 'wf_59', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '59. Lack of [ MOTIVATE ] is a big problem for students who don\'t like school.', rootWord: 'MOTIVATE', answer: 'motivation', explanation: 'Noun form: motivation.' },
+            { id: 'wf_60', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '60. The country\'s [ ECONOMIC ] has grown a lot in recent years.', rootWord: 'ECONOMIC', answer: 'economy', explanation: 'Noun form: economy.' },
+            { id: 'wf_61', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '61. Thank you for your [ INVITE ] to the party.', rootWord: 'INVITE', answer: 'invitation', explanation: 'Noun form: invitation.' },
+            { id: 'wf_62', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '62. The doctor said that rest is the best [ TREAT ] for a cold.', rootWord: 'TREAT', answer: 'treatment', explanation: 'Noun form: treatment.' },
+            { id: 'wf_63', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '63. Be [ CARE ] when you cross the road.', rootWord: 'CARE', answer: 'careful', explanation: 'Adjective form: careful.' },
+            { id: 'wf_64', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '64. She [ SLOW ] opened the door and looked inside.', rootWord: 'SLOW', answer: 'slowly', explanation: 'Adverb form: slowly.' },
+            { id: 'wf_65', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '65. We need more [ INFORM ] about the course before we sign up.', rootWord: 'INFORM', answer: 'information', explanation: 'Uncountable noun form: information.' },
+            { id: 'wf_66', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '66. This is a very [ STRESS ] job; you have to work twelve hours a day.', rootWord: 'STRESS', answer: 'stressful', explanation: 'Adjective form: stressful.' },
+            { id: 'wf_67', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '67. The film was so [ BORE ] that I fell asleep.', rootWord: 'BORE', answer: 'boring', explanation: 'Adjective describing thing: boring.' },
+            { id: 'wf_68', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '68. The lesson was [ INTEREST ]; I learned a lot.', rootWord: 'INTEREST', answer: 'interesting', explanation: 'Adjective form: interesting.' },
+            { id: 'wf_69', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '69. The test was [ EXTREME ] easy. I finished in ten minutes.', rootWord: 'EXTREME', answer: 'extremely', explanation: 'Adverb form modifying adjective: extremely.' },
+            { id: 'wf_70', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '70. There has been rapid [ GROW ] in the number of tourists.', rootWord: 'GROW', answer: 'growth', explanation: 'Noun form: growth.' },
+            { id: 'wf_71', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '71. Our biggest [ DIFFICULT ] is that we have very little time.', rootWord: 'DIFFICULT', answer: 'difficulty', explanation: 'Noun form: difficulty.' },
+            { id: 'wf_72', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '72. The firefighter showed great [ BRAVE ] when he saved the child.', rootWord: 'BRAVE', answer: 'bravery', explanation: 'Noun form: bravery.' },
+            { id: 'wf_73', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '73. The film was so [ FRIGHTEN ] that I closed my eyes.', rootWord: 'FRIGHTEN', answer: 'frightening', explanation: 'Adjective form: frightening.' },
+            { id: 'wf_74', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '74. Their [ FRIEND ] began at school and lasted fifty years.', rootWord: 'FRIEND', answer: 'friendship', explanation: 'Noun form with suffix -ship: friendship.' },
+            { id: 'wf_75', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '75. Thousands of [ TOUR ] visit the castle every year.', rootWord: 'TOUR', answer: 'tourists', explanation: 'Plural noun form: tourists.' },
+            { id: 'wf_76', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '76. Fruit and vegetables are very [ HEALTH ] for you.', rootWord: 'HEALTH', answer: 'healthy', explanation: 'Adjective form: healthy.' },
+            { id: 'wf_77', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '77. This pen is [ USE ]; it doesn\'t write any more.', rootWord: 'USE', answer: 'useless', explanation: 'Negative adjective: useless.' },
+            { id: 'wf_78', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '78. I was amazed by the [ BEAUTIFUL ] of the mountain view.', rootWord: 'BEAUTIFUL', answer: 'beauty', explanation: 'Noun form: beauty.' },
+            { id: 'wf_79', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '79. He is a [ SUCCESS ] businessman and owns three companies.', rootWord: 'SUCCESS', answer: 'successful', explanation: 'Adjective form: successful.' },
+            { id: 'wf_80', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '80. The [ PAINT ] painted the walls of our house white.', rootWord: 'PAINT', answer: 'painter', explanation: 'Noun form (person): painter.' },
+            { id: 'wf_81', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '81. She was [ EXHAUST ] after running ten kilometres.', rootWord: 'EXHAUST', answer: 'exhausted', explanation: 'Adjective form describing person: exhausted.' },
+            { id: 'wf_82', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '82. It was a great [ PLEASE ] to meet you.', rootWord: 'PLEASE', answer: 'pleasure', explanation: 'Noun form: pleasure.' },
+            { id: 'wf_83', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '83. I wrote a long [ DESCRIBE ] of my holiday in my diary.', rootWord: 'DESCRIBE', answer: 'description', explanation: 'Noun form: description.' },
+            { id: 'wf_84', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '84. We stayed in a [ LUXURY ] hotel with a swimming pool and a spa.', rootWord: 'LUXURY', answer: 'luxurious', explanation: 'Adjective form: luxurious.' },
+            { id: 'wf_85', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '85. The Eiffel Tower is one of the most [ IMPRESS ] buildings in the world.', rootWord: 'IMPRESS', answer: 'impressive', explanation: 'Adjective form: impressive.' },
+            { id: 'wf_86', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '86. She is very [ HELP ] and always helps her neighbours.', rootWord: 'HELP', answer: 'helpful', explanation: 'Adjective form: helpful.' },
+            { id: 'wf_87', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '87. I need to [ SHORT ] these trousers; they are too long.', rootWord: 'SHORT', answer: 'shorten', explanation: 'Verb form with -en: shorten.' },
+            { id: 'wf_88', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '88. We sat in [ SILENT ] during the exam.', rootWord: 'SILENT', answer: 'silence', explanation: 'Noun form: silence.' },
+            { id: 'wf_89', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '89. It is [ LEGAL ] to drive without a licence.', rootWord: 'LEGAL', answer: 'illegal', explanation: 'Negative adjective prefix il-: illegal.' },
+            { id: 'wf_90', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '90. They want to [ WIDE ] the road because of the heavy traffic.', rootWord: 'WIDE', answer: 'widen', explanation: 'Verb form with -en: widen.' },
+            { id: 'wf_91', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '91. The people in the village were very [ FRIEND ] to us.', rootWord: 'FRIEND', answer: 'friendly', explanation: 'Adjective form: friendly.' },
+            { id: 'wf_92', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '92. The [ SIMILAR ] between the two brothers is easy to see.', rootWord: 'SIMILAR', answer: 'similarity', explanation: 'Noun form: similarity.' },
+            { id: 'wf_93', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '93. My room is always [ TIDY ]; there are clothes everywhere.', rootWord: 'TIDY', answer: 'untidy', explanation: 'Negative adjective prefix un-: untidy.' },
+            { id: 'wf_94', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '94. The teacher praised her [ HONEST ] when she returned the lost wallet.', rootWord: 'HONEST', answer: 'honesty', explanation: 'Noun form: honesty.' },
+            { id: 'wf_95', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '95. She explained it so [ CLEAR ] that everyone understood.', rootWord: 'CLEAR', answer: 'clearly', explanation: 'Adverb form: clearly.' },
+            { id: 'wf_96', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '96. His [ DECIDE ] to leave the company surprised everybody.', rootWord: 'DECIDE', answer: 'decision', explanation: 'Noun form: decision.' },
+            { id: 'wf_97', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '97. A good teacher can [ COURAGE ] students to study.', rootWord: 'COURAGE', answer: 'encourage', explanation: 'Verb with prefix en-: encourage.' },
+            { id: 'wf_98', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '98. It was a [ SCIENCE ] discovery that changed the way we see the world.', rootWord: 'SCIENCE', answer: 'scientific', explanation: 'Adjective form: scientific.' },
+            { id: 'wf_99', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '99. The police tried to [ IDENTITY ] the thief from the photographs.', rootWord: 'IDENTITY', answer: 'identify', explanation: 'Verb form: identify.' },
+            { id: 'wf_100', type: 'fe3', instruction: 'Use the word in capitals to form a word that fits the gap.', prompt: '100. She is a talented [ ART ] and her paintings hang in many galleries.', rootWord: 'ART', answer: 'artist', explanation: 'Noun form (person): artist.' }
+        ];
+
+        // ===== TEACHER REPORT SETTINGS =====
+        // A tanári jelentés / tanúsítvány csak akkor nyílik meg, ha a diák
+        // MINDHÁROM feladattípusból legalább ennyi kérdést megválaszolt (összesítve, több játékon át).
+        const REQUIRED_PER_TYPE = 20;
+        const TASK_TYPES = ['fe1', 'fe2', 'fe3'];
+        const TASK_TYPE_NAMES = { fe1: 'FE1: Multiple Choice', fe2: 'FE2: Open Cloze', fe3: 'FE3: Word Formation' };
+
+        // State variables
+        let appState = {
+            studentName: '',
+            darkMode: false,
+            soundEnabled: true,
+            selectedCategory: 'full', // 'fe1', 'fe2', 'fe3', or 'full'
+            selectedLength: 10,
+            activeQuestions: [],
+            currentIndex: 0,
+            userAnswers: [], // { questionId, input, isCorrect, submitted }
+            timerSeconds: 0,
+            timerInterval: null,
+            history: []
+        };
+
+        // Web Audio API Sound Synthesizer
+        const AudioSynth = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    if (AudioContext) this.ctx = new AudioContext();
+                }
+            },
+            playCorrect() {
+                if (!appState.soundEnabled) return;
+                this.init();
+                if (!this.ctx) return;
+                try {
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.15); // E5
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.3);
+                } catch(e) {}
+            },
+            playIncorrect() {
+                if (!appState.soundEnabled) return;
+                this.init();
+                if (!this.ctx) return;
+                try {
+                    const now = this.ctx.currentTime;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, now); // A3
+                    osc.frequency.setValueAtTime(180, now + 0.1);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } catch(e) {}
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadLocalStorage();
+            setupTheme();
+            checkStudentNameMandatory();
+            bindEvents();
+            updateDashboardStats();
+        });
+
+        // Each student's results are stored under their own key
+        function historyKey(name) {
+            return 'b1_history_' + (name || '').trim().toLowerCase();
+        }
+
+        function loadHistoryFor(name) {
+            try {
+                const raw = localStorage.getItem(historyKey(name));
+                const arr = raw ? JSON.parse(raw) : [];
+                return Array.isArray(arr) ? arr : [];
+            } catch (e) { return []; }
+        }
+
+        // Load local storage data
+        function loadLocalStorage() {
+            const savedName = localStorage.getItem('b1_student_name');
+            if (savedName && savedName.trim() && savedName.toLowerCase() !== 'guest') {
+                appState.studentName = savedName.trim();
+            }
+
+            const savedTheme = localStorage.getItem('b1_theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                appState.darkMode = true;
+            }
+
+            appState.history = [];
+            if (appState.studentName) {
+                // One-time migration: old versions stored everything under one shared key
+                const legacy = localStorage.getItem('b1_history');
+                if (legacy && !localStorage.getItem(historyKey(appState.studentName))) {
+                    localStorage.setItem(historyKey(appState.studentName), legacy);
+                }
+                if (legacy) localStorage.removeItem('b1_history');
+                appState.history = loadHistoryFor(appState.studentName);
+            }
+        }
+
+        // Theme setup
+        function setupTheme() {
+            if (appState.darkMode) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+
+        // Check if student name exists
+        function checkStudentNameMandatory() {
+            if (!appState.studentName || appState.studentName.toLowerCase() === 'guest') {
+                document.getElementById('modal-name-entry').classList.remove('hidden');
+            } else {
+                updateUserDisplayUI();
+            }
+        }
+
+        // Update name UI
+        function updateUserDisplayUI() {
+            document.getElementById('user-display-name').textContent = appState.studentName;
+            document.getElementById('hero-student-name').textContent = appState.studentName;
+            document.getElementById('user-avatar-initials').textContent = getInitials(appState.studentName);
+        }
+
+        function getInitials(name) {
+            if (!name) return 'ST';
+            const parts = name.trim().split(' ');
+            if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
+            return name.substring(0, 2).toUpperCase();
+        }
+
+        // Event Listeners binding
+        function bindEvents() {
+            // Student Name Modal Submit
+            document.getElementById('form-name-entry').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const inputVal = document.getElementById('input-student-fullname').value.trim();
+                if (inputVal.length < 2 || inputVal.toLowerCase() === 'guest') {
+                    document.getElementById('name-validation-error').classList.remove('hidden');
+                    return;
+                }
+                document.getElementById('name-validation-error').classList.add('hidden');
+
+                const oldName = appState.studentName;
+                const nameChanged = oldName && oldName.trim().toLowerCase() !== inputVal.toLowerCase();
+
+                if (nameChanged && appState.history.length > 0) {
+                    const isNewStudent = confirm(
+                        `Új tanulóként lépsz be?\n\nOK = igen, új tanuló: "${inputVal}" tiszta lappal indul ("${oldName}" eredményei megmaradnak a gépen).\nMégse = nem, csak javítom a nevet: az eddigi eredmények megmaradnak.`
+                    );
+                    if (isNewStudent) {
+                        appState.history = loadHistoryFor(inputVal);
+                    } else {
+                        localStorage.setItem(historyKey(inputVal), JSON.stringify(appState.history));
+                        if (historyKey(oldName) !== historyKey(inputVal)) localStorage.removeItem(historyKey(oldName));
+                    }
+                } else if (nameChanged) {
+                    appState.history = loadHistoryFor(inputVal);
+                } else if (!oldName) {
+                    appState.history = loadHistoryFor(inputVal);
+                }
+
+                appState.studentName = inputVal;
+                localStorage.setItem('b1_student_name', inputVal);
+                updateUserDisplayUI();
+                updateDashboardStats();
+                document.getElementById('modal-name-entry').classList.add('hidden');
+            });
+
+            // Profile Edit
+            document.getElementById('btn-edit-profile').addEventListener('click', () => {
+                document.getElementById('input-student-fullname').value = appState.studentName;
+                document.getElementById('modal-name-entry').classList.remove('hidden');
+            });
+
+            // Theme Toggle
+            document.getElementById('btn-toggle-theme').addEventListener('click', () => {
+                appState.darkMode = !appState.darkMode;
+                localStorage.setItem('b1_theme', appState.darkMode ? 'dark' : 'light');
+                setupTheme();
+            });
+
+            // Sound Toggle
+            document.getElementById('btn-toggle-sound').addEventListener('click', () => {
+                appState.soundEnabled = !appState.soundEnabled;
+                const icon = document.getElementById('icon-sound');
+                if (appState.soundEnabled) {
+                    icon.className = 'fa-solid fa-volume-high text-lg text-blue-600 dark:text-blue-400';
+                } else {
+                    icon.className = 'fa-solid fa-volume-xmark text-lg text-slate-400';
+                }
+            });
+
+            // Navigation Brand return to dashboard
+            document.getElementById('nav-brand').addEventListener('click', () => {
+                if (confirm('Are you sure you want to return to the main dashboard? Progress in active quiz will be reset.')) {
+                    showView('dashboard');
+                }
+            });
+
+            // Category Cards Selection
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    document.querySelectorAll('.category-card').forEach(c => c.classList.remove('ring-4', 'ring-blue-500'));
+                    card.classList.add('ring-4', 'ring-blue-500');
+                    appState.selectedCategory = card.getAttribute('data-mode');
+                });
+            });
+
+            // Question Length Options Selection
+            document.querySelectorAll('.length-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.length-btn').forEach(b => {
+                        b.className = 'length-btn px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 text-slate-700 dark:text-slate-300 font-semibold text-sm';
+                    });
+                    btn.className = 'length-btn px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-bold text-sm';
+                    appState.selectedLength = parseInt(btn.getAttribute('data-len'));
+                });
+            });
+
+            // Quick Start & Begin Buttons
+            document.getElementById('btn-quick-start').addEventListener('click', () => {
+                appState.selectedCategory = 'full';
+                appState.selectedLength = 10;
+                startQuizSession();
+            });
+
+            document.getElementById('btn-start-selected-quiz').addEventListener('click', () => {
+                startQuizSession();
+            });
+
+            // Exit Quiz
+            document.getElementById('btn-quit-quiz').addEventListener('click', () => {
+                if (confirm('Are you sure you want to exit the quiz?')) {
+                    clearInterval(appState.timerInterval);
+                    showView('dashboard');
+                }
+            });
+
+            // Question Navigation buttons
+            document.getElementById('btn-prev-q').addEventListener('click', () => {
+                if (appState.currentIndex > 0) {
+                    appState.currentIndex--;
+                    renderCurrentQuestion();
+                }
+            });
+
+            document.getElementById('btn-skip-q').addEventListener('click', handleAnswerSkip);
+            document.getElementById('btn-submit-q').addEventListener('click', handleAnswerSubmit);
+            document.getElementById('btn-next-q').addEventListener('click', handleNextQuestion);
+
+            // Results Navigation Buttons
+            document.getElementById('btn-results-home').addEventListener('click', () => {
+                showView('dashboard');
+                updateDashboardStats();
+            });
+
+            document.getElementById('btn-review-mistakes').addEventListener('click', renderReviewMistakes);
+
+            document.getElementById('btn-open-certificate').addEventListener('click', openCertificateModal);
+
+            document.getElementById('btn-close-cert').addEventListener('click', () => {
+                document.getElementById('modal-certificate').classList.add('hidden');
+            });
+
+            document.getElementById('btn-print-cert').addEventListener('click', () => {
+                window.print();
+            });
+
+            document.getElementById('btn-copy-report').addEventListener('click', copyTeacherReport);
+            document.getElementById('btn-dashboard-report').addEventListener('click', openReportModal);
+            document.getElementById('btn-report-modal-copy').addEventListener('click', copyTeacherReport);
+            document.getElementById('btn-close-report').addEventListener('click', () => {
+                document.getElementById('modal-report').classList.add('hidden');
+            });
+
+            // Single Key Enter & Keyboard Shortcuts Workflow
+            document.addEventListener('keydown', (e) => {
+                const quizViewVisible = !document.getElementById('view-quiz').classList.contains('hidden');
+                if (!quizViewVisible) return;
+
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const submitBtn = document.getElementById('btn-submit-q');
+                    const nextBtn = document.getElementById('btn-next-q');
+
+                    if (!submitBtn.classList.contains('hidden')) {
+                        handleAnswerSubmit();
+                    } else if (!nextBtn.classList.contains('hidden')) {
+                        handleNextQuestion();
+                    }
+                } else if (['a', 'b', 'c', 'd', 'A', 'B', 'C', 'D'].includes(e.key)) {
+                    const activeQ = appState.activeQuestions[appState.currentIndex];
+                    if (activeQ.type === 'fe1' && !appState.userAnswers[appState.currentIndex].submitted) {
+                        const optIdx = ['a', 'b', 'c', 'd'].indexOf(e.key.toLowerCase());
+                        const optRadio = document.getElementById(`opt-${optIdx}`);
+                        if (optRadio) optRadio.checked = true;
+                    }
+                }
+            });
+        }
+
+        function showView(viewName) {
+            document.getElementById('view-dashboard').classList.add('hidden');
+            document.getElementById('view-quiz').classList.add('hidden');
+            document.getElementById('view-quiz').classList.remove('flex');
+            document.getElementById('view-results').classList.add('hidden');
+            document.getElementById('view-results').classList.remove('flex');
+
+            if (viewName === 'dashboard') {
+                document.getElementById('view-dashboard').classList.remove('hidden');
+            } else if (viewName === 'quiz') {
+                document.getElementById('view-quiz').classList.remove('hidden');
+                document.getElementById('view-quiz').classList.add('flex');
+            } else if (viewName === 'results') {
+                document.getElementById('view-results').classList.remove('hidden');
+                document.getElementById('view-results').classList.add('flex');
+            }
+        }
+
+        // Start Quiz Session
+        function startQuizSession() {
+            let pool = [];
+            if (appState.selectedCategory === 'fe1') {
+                pool = B1_QUESTION_BANK.filter(q => q.type === 'fe1');
+            } else if (appState.selectedCategory === 'fe2') {
+                pool = B1_QUESTION_BANK.filter(q => q.type === 'fe2');
+            } else if (appState.selectedCategory === 'fe3') {
+                pool = B1_QUESTION_BANK.filter(q => q.type === 'fe3');
+            } else {
+                pool = [...B1_QUESTION_BANK];
+            }
+
+            appState.activeQuestions = generateQuestionsForSession(pool, appState.selectedLength);
+            appState.currentIndex = 0;
+            appState.userAnswers = appState.activeQuestions.map(q => ({
+                questionId: q.id,
+                input: '',
+                isCorrect: false,
+                submitted: false,
+                skipped: false
+            }));
+
+            appState.timerSeconds = 0;
+            clearInterval(appState.timerInterval);
+            appState.timerInterval = setInterval(() => {
+                appState.timerSeconds++;
+                updateTimerDisplay();
+            }, 1000);
+
+            const badge = document.getElementById('quiz-mode-badge');
+            const catMap = {
+                'fe1': 'FE1: Multiple Choice',
+                'fe2': 'FE2: Open Cloze',
+                'fe3': 'FE3: Word Formation',
+                'full': 'Full B1 Érettségi Mock'
+            };
+            badge.textContent = catMap[appState.selectedCategory] || 'B1 Practice';
+
+            showView('quiz');
+            renderCurrentQuestion();
+        }
+
+        function generateQuestionsForSession(sourcePool, targetLength) {
+            let shuffled = [...sourcePool].sort(() => 0.5 - Math.random());
+            let result = [];
+            while (result.length < targetLength) {
+                for (let item of shuffled) {
+                    if (result.length >= targetLength) break;
+                    result.push({ ...item });
+                }
+                shuffled = [...sourcePool].sort(() => 0.5 - Math.random());
+            }
+            return result;
+        }
+
+        function updateTimerDisplay() {
+            const mins = String(Math.floor(appState.timerSeconds / 60)).padStart(2, '0');
+            const secs = String(appState.timerSeconds % 60).padStart(2, '0');
+            document.getElementById('quiz-timer').textContent = `${mins}:${secs}`;
+        }
+
+        function renderCurrentQuestion() {
+            const idx = appState.currentIndex;
+            const total = appState.activeQuestions.length;
+            const q = appState.activeQuestions[idx];
+            const answerState = appState.userAnswers[idx];
+
+            document.getElementById('quiz-progress-num').textContent = idx + 1;
+            document.getElementById('quiz-total-num').textContent = total;
+            document.getElementById('quiz-progress-bar').style.width = `${((idx + 1) / total) * 100}%`;
+
+            renderNavigatorGrid();
+
+            const catNames = {
+                'fe1': 'Multiple Choice (FE1)',
+                'fe2': 'Open Cloze (FE2)',
+                'fe3': 'Word Formation (FE3)'
+            };
+            document.getElementById('q-category-tag').textContent = catNames[q.type] || 'B1 Task';
+            document.getElementById('q-instruction-text').textContent = q.instruction;
+
+            const promptBox = document.getElementById('q-prompt-box');
+            if (q.type === 'fe3') {
+                promptBox.innerHTML = q.prompt.replace(/\[\s*([A-Z]+)\s*\]/g, `<span class="inline-block bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300 px-3 py-1 rounded-xl font-bold font-mono border border-purple-300 dark:border-purple-700">[$1]</span>`);
+            } else {
+                promptBox.textContent = q.prompt;
+            }
+
+            const answerArea = document.getElementById('q-answer-area');
+            answerArea.innerHTML = '';
+
+            if (q.type === 'fe1') {
+                q.options.forEach((opt, i) => {
+                    const letter = ['A', 'B', 'C', 'D'][i];
+                    const optWrapper = document.createElement('label');
+                    optWrapper.className = `flex items-center p-4 rounded-2xl border-2 cursor-pointer transition ${
+                        answerState.submitted 
+                        ? (letter === q.answer ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40' : (answerState.input === letter ? 'border-red-500 bg-red-50 dark:bg-red-950/40' : 'border-slate-200 dark:border-slate-700 opacity-60'))
+                        : 'border-slate-200 dark:border-slate-700 hover:border-blue-400 bg-slate-50/50 dark:bg-slate-900/40'
+                    }`;
+
+                    optWrapper.innerHTML = `
+                        <input type="radio" id="opt-${i}" name="mc-option" value="${letter}" ${answerState.input === letter ? 'checked' : ''} ${answerState.submitted ? 'disabled' : ''} class="w-4 h-4 text-blue-600">
+                        <span class="ml-3 font-semibold text-slate-800 dark:text-slate-100 text-base">${opt}</span>
+                    `;
+                    answerArea.appendChild(optWrapper);
+                });
+            } else if (q.type === 'fe2' || q.type === 'fe3') {
+                const inputWrapper = document.createElement('div');
+                inputWrapper.className = 'space-y-2';
+                inputWrapper.innerHTML = `
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                        Your Written Answer:
+                    </label>
+                    <input type="text" id="input-text-answer" value="${answerState.input}" ${answerState.submitted ? 'disabled' : ''} placeholder="Type missing word here..." autocomplete="off" spellcheck="false" class="w-full px-5 py-4 rounded-2xl border-2 text-lg font-bold ${
+                        answerState.submitted 
+                        ? (answerState.isCorrect ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-900 dark:text-emerald-100' : 'border-red-500 bg-red-50 dark:bg-red-950/40 text-red-900 dark:text-red-100')
+                        : 'border-slate-300 dark:border-slate-600 focus:border-blue-500 bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white'
+                    } outline-none transition">
+                `;
+                answerArea.appendChild(inputWrapper);
+                
+                if (!answerState.submitted) {
+                    setTimeout(() => {
+                        const txtInput = document.getElementById('input-text-answer');
+                        if (txtInput) txtInput.focus();
+                    }, 50);
+                }
+            }
+
+            const prevBtn = document.getElementById('btn-prev-q');
+            const skipBtn = document.getElementById('btn-skip-q');
+            const submitBtn = document.getElementById('btn-submit-q');
+            const nextBtn = document.getElementById('btn-next-q');
+            const feedbackBox = document.getElementById('q-feedback-box');
+
+            prevBtn.disabled = idx === 0;
+
+            if (answerState.submitted) {
+                submitBtn.classList.add('hidden');
+                if (skipBtn) skipBtn.classList.add('hidden');
+                nextBtn.classList.remove('hidden');
+                
+                feedbackBox.classList.remove('hidden');
+                const feedbackIcon = document.getElementById('feedback-icon');
+                const feedbackTitle = document.getElementById('feedback-title');
+                const feedbackComp = document.getElementById('feedback-comparison');
+                const feedbackExp = document.getElementById('feedback-explanation');
+
+                if (answerState.isCorrect) {
+                    feedbackBox.className = 'rounded-2xl p-5 border transition-all animate-fadeIn bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-100';
+                    feedbackIcon.className = 'w-8 h-8 rounded-full flex items-center justify-center text-lg text-white font-bold flex-shrink-0 bg-emerald-600';
+                    feedbackIcon.innerHTML = '<i class="fa-solid fa-check"></i>';
+                    feedbackTitle.textContent = 'Correct Answer!';
+                    feedbackComp.textContent = `Your answer: "${answerState.input}" matches the official key!`;
+                } else {
+                    feedbackBox.className = 'rounded-2xl p-5 border transition-all animate-fadeIn bg-red-50 dark:bg-red-950/40 border-red-200 dark:border-red-800 text-red-900 dark:text-red-100';
+                    feedbackIcon.className = 'w-8 h-8 rounded-full flex items-center justify-center text-lg text-white font-bold flex-shrink-0 bg-red-600';
+                    feedbackIcon.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+                    feedbackTitle.textContent = 'Incorrect / Review Key';
+                    feedbackComp.textContent = `Your answer: "${answerState.input || '(None)'}" | Correct key: "${q.answer}"`;
+                }
+                feedbackExp.textContent = q.explanation;
+            } else {
+                submitBtn.classList.remove('hidden');
+                if (skipBtn) skipBtn.classList.remove('hidden');
+                nextBtn.classList.add('hidden');
+                feedbackBox.classList.add('hidden');
+            }
+        }
+
+        function handleAnswerSubmit() {
+            const idx = appState.currentIndex;
+            const q = appState.activeQuestions[idx];
+            const answerState = appState.userAnswers[idx];
+            if (answerState.submitted) return;
+
+            let userInput = '';
+            if (q.type === 'fe1') {
+                const checkedOpt = document.querySelector('input[name="mc-option"]:checked');
+                if (!checkedOpt) {
+                    alert('Kérjük, válassz egy választási lehetőséget!');
+                    return;
+                }
+                userInput = checkedOpt.value;
+            } else {
+                const txtInput = document.getElementById('input-text-answer');
+                if (!txtInput || !txtInput.value.trim()) {
+                    alert('Kérjük, írd be a választ!');
+                    return;
+                }
+                userInput = txtInput.value.trim();
+            }
+
+            answerState.input = userInput;
+            answerState.submitted = true;
+
+            if (q.type === 'fe1') {
+                answerState.isCorrect = (userInput.toUpperCase() === q.answer.toUpperCase());
+            } else {
+                answerState.isCorrect = (userInput.toLowerCase() === q.answer.toLowerCase());
+            }
+
+            if (answerState.isCorrect) {
+                AudioSynth.playCorrect();
+            } else {
+                AudioSynth.playIncorrect();
+            }
+
+            renderCurrentQuestion();
+        }
+
+        function handleAnswerSkip() {
+            const idx = appState.currentIndex;
+            const answerState = appState.userAnswers[idx];
+            if (answerState.submitted) return;
+
+            answerState.input = '(skipped)';
+            answerState.skipped = true;
+            answerState.submitted = true;
+            answerState.isCorrect = false;
+
+            AudioSynth.playIncorrect();
+            renderCurrentQuestion();
+        }
+
+        function handleNextQuestion() {
+            if (appState.currentIndex < appState.activeQuestions.length - 1) {
+                appState.currentIndex++;
+                renderCurrentQuestion();
+            } else {
+                finishQuizSession();
+            }
+        }
+
+        function renderNavigatorGrid() {
+            const navGrid = document.getElementById('question-navigator-grid');
+            if (!navGrid) return;
+            navGrid.innerHTML = '';
+
+            appState.activeQuestions.forEach((q, i) => {
+                const ans = appState.userAnswers[i];
+                const btn = document.createElement('button');
+                let btnClasses = 'w-8 h-8 rounded-lg text-xs font-bold flex items-center justify-center transition ';
+
+                if (i === appState.currentIndex) {
+                    btnClasses += 'ring-2 ring-blue-500 font-extrabold ';
+                }
+
+                if (ans.submitted) {
+                    if (ans.isCorrect) {
+                        btnClasses += 'bg-emerald-500 text-white';
+                    } else {
+                        btnClasses += 'bg-red-500 text-white';
+                    }
+                } else {
+                    btnClasses += 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-300 dark:hover:bg-slate-600';
+                }
+
+                btn.className = btnClasses;
+                btn.textContent = i + 1;
+                btn.addEventListener('click', () => {
+                    appState.currentIndex = i;
+                    renderCurrentQuestion();
+                });
+                navGrid.appendChild(btn);
+            });
+        }
+
+        function finishQuizSession() {
+            clearInterval(appState.timerInterval);
+
+            const total = appState.activeQuestions.length;
+            const correctCount = appState.userAnswers.filter(a => a.isCorrect).length;
+            const percentage = Math.round((correctCount / total) * 100);
+            const gradeObj = evaluateGrade(percentage);
+
+            const byType = {};
+            TASK_TYPES.forEach(t => {
+                const idxs = appState.activeQuestions.map((q, i) => q.type === t ? i : -1).filter(i => i >= 0);
+                byType[t] = {
+                    total: idxs.length,
+                    answered: idxs.filter(i => appState.userAnswers[i].submitted && !appState.userAnswers[i].skipped).length,
+                    correct: idxs.filter(i => appState.userAnswers[i].isCorrect).length
+                };
+            });
+
+            const sessionRecord = {
+                byType: byType,
+                date: new Date().toISOString(),
+                category: appState.selectedCategory,
+                total: total,
+                score: correctCount,
+                percentage: percentage,
+                grade: gradeObj.label,
+                gradeNum: gradeObj.num,
+                timeSeconds: appState.timerSeconds
+            };
+            appState.history.push(sessionRecord);
+            localStorage.setItem(historyKey(appState.studentName), JSON.stringify(appState.history));
+
+            document.getElementById('res-student-name').textContent = appState.studentName;
+            document.getElementById('res-score-fraction').textContent = `${correctCount} / ${total}`;
+            document.getElementById('res-score-percentage').textContent = `${percentage}%`;
+            
+            const gradeElem = document.getElementById('res-Érettségi-grade');
+            gradeElem.textContent = gradeObj.label;
+            gradeElem.className = `text-2xl font-extrabold ${gradeObj.colorClass}`;
+
+            const catBreakdown = document.getElementById('res-category-breakdown');
+            catBreakdown.innerHTML = '';
+
+            const types = ['fe1', 'fe2', 'fe3'];
+            const typeNames = { fe1: 'FE1: Multiple Choice', fe2: 'FE2: Open Cloze', fe3: 'FE3: Word Formation' };
+
+            types.forEach(t => {
+                const qOfArr = appState.activeQuestions.filter(q => q.type === t);
+                if (qOfArr.length > 0) {
+                    const correctInT = appState.userAnswers.filter((a, idx) => appState.activeQuestions[idx].type === t && a.isCorrect).length;
+                    const pctT = Math.round((correctInT / qOfArr.length) * 100);
+                    
+                    const row = document.createElement('div');
+                    row.className = 'flex justify-between items-center py-1 border-b border-slate-200/50 dark:border-slate-700/50 last:border-none';
+                    row.innerHTML = `
+                        <span class="font-medium text-slate-700 dark:text-slate-300">${typeNames[t]}</span>
+                        <span class="font-bold text-slate-900 dark:text-white">${correctInT} / ${qOfArr.length} (${pctT}%)</span>
+                    `;
+                    catBreakdown.appendChild(row);
+                }
+            });
+
+            if (percentage >= 60 && typeof confetti === 'function') {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+
+            updateUnlockUI();
+            showView('results');
+        }
+
+        function evaluateGrade(percentage) {
+            if (percentage >= 80) {
+                return { num: 5, label: 'Grade 5 (Excellent)', colorClass: 'text-emerald-600 dark:text-emerald-400' };
+            } else if (percentage >= 60) {
+                return { num: 4, label: 'Grade 4 (Good)', colorClass: 'text-blue-600 dark:text-blue-400' };
+            } else if (percentage >= 40) {
+                return { num: 3, label: 'Grade 3 (Satisfactory)', colorClass: 'text-amber-600 dark:text-amber-400' };
+            } else if (percentage >= 25) {
+                return { num: 2, label: 'Grade 2 (Pass)', colorClass: 'text-orange-600 dark:text-orange-400' };
+            } else {
+                return { num: 1, label: 'Grade 1 (Fail)', colorClass: 'text-red-600 dark:text-red-400' };
+            }
+        }
+
+        function renderReviewMistakes() {
+            const container = document.getElementById('review-mistakes-container');
+            const list = document.getElementById('review-questions-list');
+            container.classList.remove('hidden');
+            list.innerHTML = '';
+
+            appState.activeQuestions.forEach((q, i) => {
+                const ans = appState.userAnswers[i];
+                const card = document.createElement('div');
+                card.className = `p-5 rounded-2xl border ${ans.isCorrect ? 'bg-emerald-50/50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800' : 'bg-red-50/50 dark:bg-red-950/20 border-red-200 dark:border-red-800'} space-y-2`;
+
+                card.innerHTML = `
+                    <div class="flex justify-between items-center text-xs font-bold">
+                        <span class="uppercase ${ans.isCorrect ? 'text-emerald-700 dark:text-emerald-400' : 'text-red-700 dark:text-red-400'}">Question ${i + 1} • ${ans.isCorrect ? 'Correct' : 'Incorrect / Skipped'}</span>
+                        <span class="text-slate-400">${q.type.toUpperCase()}</span>
+                    </div>
+                    <p class="font-semibold text-slate-800 dark:text-slate-100">${q.prompt}</p>
+                    <div class="text-sm space-y-1 pt-1">
+                        <p><span class="font-bold text-slate-500">Your Answer:</span> <span class="${ans.isCorrect ? 'text-emerald-600 font-bold' : 'text-red-600 font-bold'}">${ans.input || '(None)'}</span></p>
+                        <p><span class="font-bold text-slate-500">Correct Key:</span> <span class="text-emerald-600 font-bold">${q.answer}</span></p>
+                    </div>
+                    <div class="pt-2 text-xs text-slate-600 dark:text-slate-300 border-t border-slate-200/50 dark:border-slate-700/50">
+                        <span class="font-bold">Explanation:</span> ${q.explanation}
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+
+            container.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openCertificateModal() {
+            if (!isReportUnlocked()) { showLockedMessage(); return; }
+            const lastSession = appState.history[appState.history.length - 1];
+            const total = lastSession ? lastSession.total : 0;
+            const score = lastSession ? lastSession.score : 0;
+            const percentage = lastSession ? lastSession.percentage : 0;
+            const gradeObj = evaluateGrade(percentage);
+
+            document.getElementById('cert-student-name').textContent = appState.studentName || 'Student';
+            document.getElementById('cert-Érettségi-grade').textContent = gradeObj.label;
+            document.getElementById('cert-score-details').textContent = `Score: ${percentage}% (${score}/${total} questions)`;
+            
+            const now = new Date();
+            document.getElementById('cert-date-issued').textContent = now.toLocaleDateString('hu-HU', { year: 'numeric', month: 'long', day: 'numeric' });
+            document.getElementById('cert-hash-code').textContent = `B1-ÉRETTSÉGI-${now.getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+
+            document.getElementById('modal-certificate').classList.remove('hidden');
+        }
+
+        // Cumulative progress per task type across all saved sessions
+        function getTypeProgress() {
+            const p = {};
+            TASK_TYPES.forEach(t => { p[t] = { total: 0, answered: 0, correct: 0 }; });
+            appState.history.forEach(h => {
+                if (h.byType) {
+                    TASK_TYPES.forEach(t => {
+                        if (h.byType[t]) {
+                            p[t].total += h.byType[t].total;
+                            p[t].answered += h.byType[t].answered;
+                            p[t].correct += h.byType[t].correct;
+                        }
+                    });
+                } else if (p[h.category]) {
+                    // Older single-type records saved by previous versions
+                    p[h.category].total += h.total;
+                    p[h.category].answered += h.total;
+                    p[h.category].correct += h.score;
+                }
+            });
+            return p;
+        }
+
+        function isReportUnlocked() {
+            const p = getTypeProgress();
+            return TASK_TYPES.every(t => p[t].answered >= REQUIRED_PER_TYPE);
+        }
+
+        function buildUnlockHTML() {
+            const p = getTypeProgress();
+            const unlocked = isReportUnlocked();
+            const rows = TASK_TYPES.map(t => {
+                const done = Math.min(p[t].answered, REQUIRED_PER_TYPE);
+                const pct = Math.round((done / REQUIRED_PER_TYPE) * 100);
+                const full = done >= REQUIRED_PER_TYPE;
+                return `
+                    <div class="space-y-1">
+                        <div class="flex justify-between text-xs font-semibold text-slate-600 dark:text-slate-300">
+                            <span>${TASK_TYPE_NAMES[t]}</span>
+                            <span>${full ? '<i class="fa-solid fa-check text-emerald-500 mr-1"></i>' : ''}${done} / ${REQUIRED_PER_TYPE}</span>
+                        </div>
+                        <div class="h-2 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+                            <div class="h-full rounded-full ${full ? 'bg-emerald-500' : 'bg-blue-500'}" style="width:${pct}%"></div>
+                        </div>
+                    </div>`;
+            }).join('');
+            return `
+                <div class="flex items-center justify-between">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                        <i class="fa-solid ${unlocked ? 'fa-lock-open text-emerald-500' : 'fa-lock text-amber-500'} mr-1.5"></i>Teacher Report Unlock
+                    </h4>
+                    <span class="text-xs font-semibold ${unlocked ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400'}">
+                        ${unlocked ? 'Report unlocked!' : `Answer ${REQUIRED_PER_TYPE} questions of each type`}
+                    </span>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">${rows}</div>`;
+        }
+
+        function updateUnlockUI() {
+            ['unlock-progress-dashboard', 'unlock-progress-results'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.innerHTML = buildUnlockHTML();
+            });
+
+            const unlocked = isReportUnlocked();
+            const lockTip = `Locked: answer at least ${REQUIRED_PER_TYPE} questions of each type (FE1, FE2, FE3).`;
+            [['btn-copy-report', 'fa-copy'], ['btn-open-certificate', 'fa-certificate'], ['btn-dashboard-report', 'fa-file-lines']].forEach(([id, icon]) => {
+                const btn = document.getElementById(id);
+                if (!btn) return;
+                btn.classList.toggle('opacity-50', !unlocked);
+                btn.classList.toggle('cursor-not-allowed', !unlocked);
+                btn.title = unlocked ? '' : lockTip;
+                const i = btn.querySelector('i');
+                if (i) i.className = `fa-solid ${unlocked ? icon : 'fa-lock'} mr-2`;
+            });
+        }
+
+        function showLockedMessage() {
+            const p = getTypeProgress();
+            const lines = TASK_TYPES.map(t => `${TASK_TYPE_NAMES[t]}: ${Math.min(p[t].answered, REQUIRED_PER_TYPE)} / ${REQUIRED_PER_TYPE}`).join('\n');
+            alert(`A jelentés még zárolva van. Mindhárom típusból meg kell válaszolnod legalább ${REQUIRED_PER_TYPE} kérdést.\n(Report locked – answer ${REQUIRED_PER_TYPE} questions of each type.)\n\n${lines}`);
+        }
+
+        function buildReportText() {
+            const lastSession = appState.history[appState.history.length - 1];
+            if (!lastSession) return '';
+
+            const p = getTypeProgress();
+            const sessions = appState.history.length;
+            const totalTime = appState.history.reduce((acc, h) => acc + (h.timeSeconds || 0), 0);
+            const allTotal = TASK_TYPES.reduce((acc, t) => acc + p[t].total, 0);
+            const allCorrect = TASK_TYPES.reduce((acc, t) => acc + p[t].correct, 0);
+            const allPct = allTotal ? Math.round((allCorrect / allTotal) * 100) : 0;
+
+            const typeLines = TASK_TYPES.map(t => {
+                const pct = p[t].total ? Math.round((p[t].correct / p[t].total) * 100) : 0;
+                const skipped = p[t].total - p[t].answered;
+                return `${TASK_TYPE_NAMES[t]}: ${p[t].correct} / ${p[t].total} (${pct}%)` + (skipped > 0 ? ` | skipped: ${skipped}` : '');
+            }).join('\n');
+
+            return `B1 Use of English Érettségi Practice Report
+-----------------------------------------
+Student Name: ${appState.studentName}
+Date: ${new Date().toLocaleString('hu-HU')}
+Sessions completed: ${sessions}
+Total practice time: ${Math.floor(totalTime / 60)}m ${totalTime % 60}s
+-----------------------------------------
+OVERALL (all sessions): ${allCorrect} / ${allTotal} (${allPct}%)
+${typeLines}
+-----------------------------------------
+Last session: ${lastSession.category.toUpperCase()} | ${lastSession.score} / ${lastSession.total} (${lastSession.percentage}%) | ${lastSession.grade} | ${Math.floor(lastSession.timeSeconds / 60)}m ${lastSession.timeSeconds % 60}s
+-----------------------------------------
+Generated by B1 Érettségi Trainer`;
+        }
+
+        function copyTeacherReport() {
+            if (!isReportUnlocked()) { showLockedMessage(); return; }
+            const reportText = buildReportText();
+            if (!reportText) return;
+
+            navigator.clipboard.writeText(reportText).then(() => {
+                alert('Teacher report copied to clipboard!');
+            }).catch(() => {
+                alert('Failed to copy report to clipboard.');
+            });
+        }
+
+        function openReportModal() {
+            if (!appState.history.length) {
+                alert('Még nem fejeztél be egyetlen gyakorlást sem. (No completed session yet.)');
+                return;
+            }
+            if (!isReportUnlocked()) { showLockedMessage(); return; }
+            document.getElementById('report-preview').textContent = buildReportText();
+            document.getElementById('modal-report').classList.remove('hidden');
+        }
+
+        function updateDashboardStats() {
+            updateUnlockUI();
+            const history = appState.history;
+            if (history.length === 0) {
+                document.getElementById('stat-total-solved').textContent = '0';
+                document.getElementById('stat-avg-accuracy').textContent = '0%';
+                document.getElementById('stat-best-grade').textContent = 'None';
+                return;
+            }
+
+            const totalSolved = history.reduce((acc, h) => acc + h.total, 0);
+            const avgPct = Math.round(history.reduce((acc, h) => acc + h.percentage, 0) / history.length);
+            const maxGradeNum = Math.max(...history.map(h => h.gradeNum || 1));
+
+            document.getElementById('stat-total-solved').textContent = totalSolved;
+            document.getElementById('stat-avg-accuracy').textContent = `${avgPct}%`;
+            document.getElementById('stat-best-grade').textContent = `Grade ${maxGradeNum}`;
+        }
+    </script>
+</body>
+</html>
